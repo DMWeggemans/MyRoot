@@ -1,0 +1,10 @@
+#
+# BACKEND #
+#
+
+[*.cs]
+# Disable ('new' expression can be simplified)
+dotnet_diagnostic.IDE0090.severity = none
+
+# Disable (Use primary constructor)
+dotnet_diagnostic.IDE0290.severity = none
