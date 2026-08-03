@@ -4,6 +4,7 @@
 
 # Folders
 .vscode/
+.angular/
 node_modules/
 
 #
