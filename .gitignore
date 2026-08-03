@@ -13,6 +13,7 @@ node_modules/
 # Folders
 .vs/
 obj/
+bin/
 
 # Files
 *.csproj.user
