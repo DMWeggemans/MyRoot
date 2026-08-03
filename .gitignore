@@ -1,0 +1,20 @@
+#
+# FRONTEND #
+#
+
+# Folders
+.vscode/
+.angular/
+node_modules/
+
+#
+# BACKEND #
+#
+
+# Folders
+.vs/
+obj/
+bin/
+
+# Files
+*.csproj.user

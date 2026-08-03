@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MyRoot.API/MyRoot.API.csproj" Id="95ab5ce5-e3b1-485c-b1c6-d61b4b01b428" />
+    <Project Path="src/MyRoot.Application/MyRoot.Application.csproj" Id="096c49b6-99f9-41d4-b9d5-53a144b103f0" />
+    <Project Path="src/MyRoot.Domain/MyRoot.Domain.csproj" Id="8719f367-db1a-4a6a-a148-a2d8a050dd7a" />
+    <Project Path="src/MyRoot.Infrastructure/MyRoot.Infrastructure.csproj" Id="4b1acace-6bb5-4489-88d2-3a3ebbbc74cf" />
+  </Folder>
+</Solution>
