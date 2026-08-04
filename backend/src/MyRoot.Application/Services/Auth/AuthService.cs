@@ -40,6 +40,9 @@ namespace MyRoot.Application.Services.Auth
 
         public async Task<Result<AuthTokens>> RegisterAsync(RegisterUserRequest request)
         {
+            if (request.UserName.Length < 4 || request.UserName.Length > 32)
+                return Result<AuthTokens>.Failed("INVALID_USERNAME");
+
             if (request.Password.Length < 8 || request.Password.Length > 128)
                 return Result<AuthTokens>.Failed("INVALID_PASSWORD");
 

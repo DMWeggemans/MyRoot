@@ -9,5 +9,6 @@
         <input type="text" id="password" [formField]="request.field.password">
         <validation-message [field]="request.field.password()"></validation-message>
     </section>
-    <button type="submit">Login</button>
+    <button type="submit" [disabled]="request.field().submitting()">Login</button>
+    <a routerLink="/register" [class.disabled]="request.field().submitting()">Register</a>
 </form>
