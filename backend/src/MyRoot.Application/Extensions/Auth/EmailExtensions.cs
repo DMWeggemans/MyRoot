@@ -1,5 +1,4 @@
 ﻿using System.Net.Mail;
-using System.Text.RegularExpressions;
 
 namespace MyRoot.Application.Extensions.Auth
 {
@@ -10,8 +9,7 @@ namespace MyRoot.Application.Extensions.Auth
             if (!MailAddress.TryCreate(email, out MailAddress? address))
                 return false;
 
-            bool matchesEmail = new Regex("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$").IsMatch(email);
-            return address.Address == email && matchesEmail;
+            return string.Equals(address.Address, email, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

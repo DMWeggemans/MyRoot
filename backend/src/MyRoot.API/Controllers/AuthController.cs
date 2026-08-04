@@ -113,11 +113,13 @@ namespace MyRoot.API.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            string token = Request.Cookies["X-Access-Token"]!;
+            string? token = Request.Cookies["X-Refresh-Token"];
 
             Response.Cookies.Delete("X-Access-Token", CookieOptions);
             Response.Cookies.Delete("X-Refresh-Token", CookieOptions);
-            await AuthService.LogoutAsync(token);
+
+            if (token is not null)
+                await AuthService.LogoutAsync(token);
 
             return Ok(Result.Success("SUCCESS_LOGOUT"));
         }
@@ -132,7 +134,7 @@ namespace MyRoot.API.Controllers
                 return Unauthorized(Result.Failed("NOT_AUTHORIZED"));
             values.Id = id;
 
-            if (!int.TryParse(Request.HttpContext.User.FindFirstValue("exp"), out int expiresOn))
+            if (!long.TryParse(Request.HttpContext.User.FindFirstValue("exp"), out long expiresOn))
                 return Unauthorized(Result.Failed("NOT_AUTHORIZED"));
             values.ExpiresOn = DateTimeOffset.FromUnixTimeSeconds(expiresOn).UtcDateTime;
 

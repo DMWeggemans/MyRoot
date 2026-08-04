@@ -5,7 +5,7 @@ namespace MyRoot.Application.Extensions
     public static class ConfigurationExtensions
     {
         public static string GetValueOrThrow(this IConfiguration configuration, string key)
-            => configuration[key] ?? configuration.Throw($"The environment variable: [{key}] is not found!");
+            => configuration[key] ?? configuration.Throw(key);
 
         public static string GetConnectionStringOrThrow(this IConfiguration configuration, string key)
             => configuration.GetValueOrThrow($"ConnectionStrings:{key}");

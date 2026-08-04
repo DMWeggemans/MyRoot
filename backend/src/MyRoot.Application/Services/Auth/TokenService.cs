@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using MyRoot.Application.Interfaces.Services.Auth;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MyRoot.Application.DTOs.Auth;
+using Microsoft.EntityFrameworkCore;
 using MyRoot.Application.Extensions;
-using MyRoot.Application.Interfaces.Services.Auth;
-using MyRoot.Domain.Entities;
-using MyRoot.Domain.Interfaces;
-using System.Security.Claims;
+using MyRoot.Application.DTOs.Auth;
 using System.Security.Cryptography;
+using MyRoot.Domain.Interfaces;
+using MyRoot.Domain.Entities;
+using System.Security.Claims;
 using System.Text;
 
 namespace MyRoot.Application.Services.Auth
@@ -27,14 +27,14 @@ namespace MyRoot.Application.Services.Auth
         public AuthToken GenerateJWT(User user)
         {
             ClaimsIdentity claims = new ClaimsIdentity([
-               new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+               new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
            ]);
 
             byte[] secret = Encoding.UTF8.GetBytes(Configuration.GetValueOrThrow("JWT:Secret"));
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(secret);
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            DateTime expiresOn = GetExpiresOn();
+            DateTime expiresOn = GetExpiresOn("JWT:ExpiryMinutes");
 
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor()
             {
@@ -51,7 +51,7 @@ namespace MyRoot.Application.Services.Auth
 
         public async Task<AuthToken> GenerateRefreshTokenAsync(User user)
         {
-            DateTime expiresOn = GetExpiresOn();
+            DateTime expiresOn = GetExpiresOn("RefreshToken:ExpiryMinutes");
             string token = GenerateToken();
 
             Context.RefreshTokens.Add(new RefreshToken()
@@ -84,7 +84,7 @@ namespace MyRoot.Application.Services.Auth
                 return (null, null);
             }
 
-            DateTime expiresOn = GetExpiresOn();
+            DateTime expiresOn = GetExpiresOn("RefreshToken:ExpiryMinutes");
             token = GenerateToken();
             
             refreshToken.TokenHash = Hash(token);
@@ -98,10 +98,10 @@ namespace MyRoot.Application.Services.Auth
             => await Context.RefreshTokens.Where(rt => rt.TokenHash == Hash(token))
                 .ExecuteDeleteAsync();
 
-        private DateTime GetExpiresOn()
+        private DateTime GetExpiresOn(string key)
         {
-            if (!int.TryParse(Configuration.GetValueOrThrow("RefreshToken:ExpiryMinutes"), out int expiryMinutes))
-                Configuration.Throw("RefreshToken:ExpiryMinutes");
+            if (!int.TryParse(Configuration.GetValueOrThrow(key), out int expiryMinutes))
+                Configuration.Throw(key);
             return DateTime.UtcNow.AddMinutes(expiryMinutes);
         }
 

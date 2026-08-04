@@ -40,8 +40,17 @@ namespace MyRoot.Application.Services.Auth
 
         public async Task<Result<AuthTokens>> RegisterAsync(RegisterUserRequest request)
         {
+            if (request.Password.Length < 8 || request.Password.Length > 128)
+                return Result<AuthTokens>.Failed("INVALID_PASSWORD");
+
+            if (await Context.Users.AnyAsync(u => u.UserName == request.UserName))
+                return Result<AuthTokens>.Failed("USERNAME_EXISTS");
+
             if (!EmailExtensions.IsValid(request.Email))
                 return Result<AuthTokens>.Failed("INVALID_EMAIL");
+
+            if (await Context.Users.AnyAsync(u => u.Email == request.Email))
+                return Result<AuthTokens>.Failed("EMAIL_EXISTS");
 
             User user = new User()
             {
