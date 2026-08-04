@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MyRoot.Application.Interfaces.Services.Auth;
+using Microsoft.AspNetCore.Authorization;
+using MyRoot.Application.Requests.Auth;
+using MyRoot.Application.Extensions;
+using MyRoot.Application.DTOs.Auth;
 using Microsoft.AspNetCore.Mvc;
 using MyRoot.Application.DTOs;
-using MyRoot.Application.DTOs.Auth;
-using MyRoot.Application.Interfaces.Services.Auth;
-using MyRoot.Application.Requests.Auth;
 using System.Security.Claims;
 
 namespace MyRoot.API.Controllers
@@ -15,13 +16,13 @@ namespace MyRoot.API.Controllers
         private readonly CookieOptions CookieOptions;
         private readonly IAuthService AuthService;
 
-        public AuthController(IWebHostEnvironment environment, IAuthService authService)
+        public AuthController(IWebHostEnvironment environment, IConfiguration configuration, IAuthService authService)
         {
             AuthService = authService;
 
             CookieOptions = new CookieOptions()
             {
-                Domain = environment.IsProduction() ? ".bowlingregio-oost.nl" : null,
+                Domain = environment.IsProduction() ? configuration.GetValueOrThrow("UI:Url").Split('/').Last() : null,
                 Secure = environment.IsProduction(),
                 SameSite = SameSiteMode.Lax,
                 HttpOnly = true

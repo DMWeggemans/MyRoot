@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
-using MyRoot.Application.DTOs;
 using MyRoot.Application.Extensions;
-using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using MyRoot.Application.DTOs;
+using Microsoft.OpenApi;
 using System.Text.Json;
+using System.Text;
 
 namespace MyRoot.API
 {

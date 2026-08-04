@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using MyRoot.Application;
-using MyRoot.Application.Extensions;
-using MyRoot.Infrastructure;
 using MyRoot.Infrastructure.Persistence;
+using MyRoot.Application.Extensions;
+using Microsoft.EntityFrameworkCore;
+using MyRoot.Infrastructure;
+using MyRoot.Application;
 
 namespace MyRoot.API
 {
