@@ -41,7 +41,7 @@ namespace MyRoot.API
                     options.RoutePrefix = "api";
                 });
 
-                app.MapGet("/", (HttpContext context) =>
+                app.MapGet("/", context =>
                 {
                     context.Response.Redirect("/api");
                     return Task.CompletedTask;

@@ -26,8 +26,8 @@ namespace MyRoot.Application.Services.Auth
         public async Task<Result<AuthTokens>> LoginAsync(LoginUserRequest request)
         {
             User? user = EmailExtensions.IsValid(request.User)
-                ? await Context.Users.SingleOrDefaultAsync(u => u.Email == request.User)
-                : await Context.Users.SingleOrDefaultAsync(u => u.UserName == request.User);
+                ? await Context.Users.SingleOrDefaultAsync(u => u.Email.ToLower() == request.User.ToLower())
+                : await Context.Users.SingleOrDefaultAsync(u => u.UserName.ToLower() == request.User.ToLower());
 
             if (user is null || !PasswordService.VerifyPassword(user.PasswordHash, request.Password))
                 return Result<AuthTokens>.Failed("INCORRECT_CREDENTIALS");
@@ -43,13 +43,13 @@ namespace MyRoot.Application.Services.Auth
             if (request.Password.Length < 8 || request.Password.Length > 128)
                 return Result<AuthTokens>.Failed("INVALID_PASSWORD");
 
-            if (await Context.Users.AnyAsync(u => u.UserName == request.UserName))
+            if (await Context.Users.AnyAsync(u => u.UserName.ToLower() == request.UserName.ToLower()))
                 return Result<AuthTokens>.Failed("USERNAME_EXISTS");
 
             if (!EmailExtensions.IsValid(request.Email))
                 return Result<AuthTokens>.Failed("INVALID_EMAIL");
 
-            if (await Context.Users.AnyAsync(u => u.Email == request.Email))
+            if (await Context.Users.AnyAsync(u => u.Email.ToLower() == request.Email.ToLower()))
                 return Result<AuthTokens>.Failed("EMAIL_EXISTS");
 
             User user = new User()
