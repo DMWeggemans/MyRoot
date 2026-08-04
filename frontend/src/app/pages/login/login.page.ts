@@ -26,7 +26,15 @@ export class LoginPage {
         const result = await this.authService.login(this.request.value());
 
         if (!result.succeeded) {
-            this.request.createError(this.request.field.password, result.message);
+            switch (result.message) {
+                case 'INCORRECT_CREDENTIALS':
+                    this.request.createError(this.request.field.password, 'The e-mail or password is incorrect');
+                    break;
+                default:
+                    this.request.createError(this.request.field.password);
+                    break;
+            }
+            
             return;
         }
 

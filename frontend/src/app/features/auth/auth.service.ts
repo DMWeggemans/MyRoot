@@ -29,6 +29,22 @@ export class AuthService {
         return result;
     }
 
+    public async refresh() {
+        const result = await this.authClient.refresh();
+        if (!result.succeeded) {
+            this.values.set(null);
+            return result;
+        }
+
+        await this.authorize();
+        return result;
+    }
+
+    public async logout() {
+        await this.authClient.logout();
+        this.values.set(null);
+    }
+
     public async authorize() {
         const result = await this.authClient.authorize();
         if (!result.succeeded || result.value === null) {
@@ -39,13 +55,8 @@ export class AuthService {
         this.values.set(result.value);
     }
 
-    public async logout() {
-        await this.authClient.logout();
-        this.values.set(null);
-    }
-
     public isAuthorized() {
-        const isAuthorized = this.values()?.expiresOn.getTime() ?? 0 > Date.now();
+        const isAuthorized = (this.values()?.expiresOn.getTime() ?? 0) > Date.now();
         if (!isAuthorized) this.values.set(null);
 
         return isAuthorized;

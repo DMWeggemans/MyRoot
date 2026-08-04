@@ -22,7 +22,7 @@ export class SignalForm<TValue> {
             ...array,
             {
                 kind: 'error',
-                message: message ?? 'Er is een onverwachte fout opgetreden.',
+                message: message ?? 'An unexpected error has occurred',
                 fieldTree: field
             }
         ]);
