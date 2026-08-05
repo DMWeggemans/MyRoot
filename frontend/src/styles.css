@@ -3,3 +3,10 @@
     padding: 0;
     margin: 0;
 }
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+    color: gray;
+    text-decoration: none;
+}

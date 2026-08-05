@@ -12,6 +12,13 @@ namespace MyRoot.API
 {
     public static class Dependencies
     {
+        private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        };
+
+        private static readonly string UnauthorizedPayload = JsonSerializer.Serialize(Result.Failed("NOT_AUTHORIZED"), JsonOptions);
+
         public static IServiceCollection RegisterAPI(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
             services.RegisterSwagger();
@@ -94,12 +101,7 @@ namespace MyRoot.API
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
 
-                        string payload = JsonSerializer.Serialize(Result.Failed("NOT_AUTHORIZED"), new JsonSerializerOptions()
-                        {
-                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                        });
-
-                        await context.Response.WriteAsync(payload);
+                        await context.Response.WriteAsync(UnauthorizedPayload);
                     }
                 };
             });
@@ -122,14 +124,12 @@ namespace MyRoot.API
                 {
                     List<string> origins = [configuration.GetValueOrThrow("UI:Url")];
                     if (environment.IsDevelopment())
-                    {
                         origins.Add("http://localhost:4200");
-                    }
 
                     policy.AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials()
-                        .WithOrigins(origins.ToArray());
+                        .WithOrigins([..origins]);
                 });
             });
 

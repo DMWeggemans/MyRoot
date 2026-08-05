@@ -1,0 +1,14 @@
+<form [formRoot]="request.field">
+    <section>
+        <label for="user">User</label>
+        <input type="text" id="user" autocomplete="username" [formField]="request.field.user">
+        <validation-message [field]="request.field.user()"></validation-message>
+    </section>
+    <section>
+        <label for="password">Password</label>
+        <input type="password" id="password" autocomplete="current-password" [formField]="request.field.password">
+        <validation-message [field]="request.field.password()"></validation-message>
+    </section>
+    <button type="submit" [disabled]="request.field().submitting()">Login</button>
+    <a routerLink="/register" [class.disabled]="request.field().submitting()">Register</a>
+</form>
