@@ -6,7 +6,7 @@
     </section>
     <section>
         <label for="password">Password</label>
-        <input type="text" id="password" autocomplete="current-password" [formField]="request.field.password">
+        <input type="password" id="password" autocomplete="current-password" [formField]="request.field.password">
         <validation-message [field]="request.field.password()"></validation-message>
     </section>
     <button type="submit" [disabled]="request.field().submitting()">Login</button>

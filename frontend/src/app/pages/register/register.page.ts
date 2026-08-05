@@ -31,7 +31,7 @@ export class RegisterPage {
             let message = '';
             switch (result.message) {
                 case 'INVALID_USERNAME':
-                    message = this.request.value().password.length < 8
+                    message = this.request.value().password.length < 4
                         ? 'The username cannot be below 4 characters'
                         : 'The username cannot exceed 32 characters';
                     return [createError(fieldtree.userName, message)];

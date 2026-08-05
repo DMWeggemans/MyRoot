@@ -1,16 +1,20 @@
 import { catchError, from, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../../features/auth/auth.service';
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { Result } from '../clients/base.types';
 import { inject } from '@angular/core';
 
 export const unauthorizedInterceptor: HttpInterceptorFn = (request, next) => {
     const authService = inject(AuthService);
 
-    return next(request).pipe(
-        catchError((error) => {
-            const result = error.error;
+    if (request.headers.has('X-HAS-RETRIED'))
+        return next(request);
 
-            if (result.message !== "NOT_AUTHORIZED" || error.url.includes("/auth/refresh"))
+    return next(request).pipe(
+        catchError((error: HttpErrorResponse) => {
+            const result = error?.error as Result<unknown> | null;
+            
+            if (result?.message !== "NOT_AUTHORIZED" || error.url?.includes("/auth/refresh"))
                 return throwError(() => error);
 
             return from(authService.refresh()).pipe(
@@ -25,7 +29,8 @@ export const unauthorizedInterceptor: HttpInterceptorFn = (request, next) => {
                     });
 
                     return next(newRequest);
-                })
+                }),
+                catchError(() => throwError(() => error))
             );
         })
     );

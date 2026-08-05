@@ -6,12 +6,12 @@
     </section>
     <section>
         <label for="email">Email</label>
-        <input type="text" id="email" autocomplete="email" [formField]="request.field.email">
+        <input type="email" id="email" autocomplete="email" [formField]="request.field.email">
         <validation-message [field]="request.field.email()"></validation-message>
     </section>
     <section>
         <label for="password">Password</label>
-        <input type="text" id="password" autocomplete="new-password" [formField]="request.field.password">
+        <input type="password" id="password" autocomplete="new-password" [formField]="request.field.password">
         <validation-message [field]="request.field.password()"></validation-message>
     </section>
     <button type="submit" [disabled]="request.field().submitting()">Register</button>

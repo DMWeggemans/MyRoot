@@ -7,6 +7,11 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard'
+    },
+    {
         path: 'login',
         component: LoginPage,
         canActivate: [unauthGuard]
@@ -20,5 +25,10 @@ export const routes: Routes = [
         path: 'dashboard',
         component: DashboardPage,
         canActivate: [authGuard]
+    },
+    {
+        path: '**',
+        pathMatch: 'full',
+        redirectTo: 'dashboard'
     }
 ];
