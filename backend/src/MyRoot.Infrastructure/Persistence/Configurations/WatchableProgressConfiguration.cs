@@ -11,6 +11,11 @@ namespace MyRoot.Infrastructure.Persistence.Configurations
             builder.HasIndex(wp => new { wp.UserId, wp.WatchableId, wp.EpisodeId })
                 .IsUnique();
 
+            builder.HasOne(wp => wp.User)
+                .WithMany(u => u.WatchableProgresses)
+                .HasForeignKey(wp => wp.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.HasOne(wp => wp.Watchable)
                 .WithMany(w => w.WatchableProgresses)
                 .HasForeignKey(wp => wp.WatchableId)

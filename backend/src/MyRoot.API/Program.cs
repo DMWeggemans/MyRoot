@@ -1,8 +1,8 @@
-using MyRoot.Infrastructure.Persistence;
-using MyRoot.Application.Extensions;
 using Microsoft.EntityFrameworkCore;
-using MyRoot.Infrastructure;
 using MyRoot.Application;
+using MyRoot.Application.Extensions;
+using MyRoot.Infrastructure;
+using MyRoot.Infrastructure.Persistence;
 
 namespace MyRoot.API
 {
@@ -30,6 +30,7 @@ namespace MyRoot.API
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseStaticFiles();
                 app.UseSwagger(options =>
                 {
                     options.RouteTemplate = "{documentName}/specifications.json";
@@ -39,6 +40,10 @@ namespace MyRoot.API
                 {
                     options.SwaggerEndpoint("specifications.json", "API");
                     options.RoutePrefix = "api";
+
+                    options.HeadContent = @"
+                        <link rel='stylesheet' type='text/css' href='../query-method.css' />
+                        <script src='../query-method.js'></script>";
                 });
 
                 app.MapGet("/", context =>

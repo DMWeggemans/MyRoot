@@ -22,6 +22,69 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MyRoot.Domain.Entities.Abstracts.Watchable", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Title");
+
+                    b.ToTable("Watchables");
+
+                    b.HasDiscriminator<int>("Type");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Episode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.Property<int>("EpisodeNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SeasonId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeasonId", "EpisodeNumber")
+                        .IsUnique();
+
+                    b.ToTable("Episodes");
+                });
+
             modelBuilder.Entity("MyRoot.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
@@ -49,6 +112,35 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Season", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("SeasonNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ShowId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShowId", "SeasonNumber")
+                        .IsUnique();
+
+                    b.ToTable("Seasons");
                 });
 
             modelBuilder.Entity("MyRoot.Domain.Entities.User", b =>
@@ -86,6 +178,71 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("MyRoot.Domain.Entities.WatchableProgress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("EpisodeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan>("Progress")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WatchableId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EpisodeId");
+
+                    b.HasIndex("WatchableId");
+
+                    b.HasIndex("UserId", "WatchableId", "EpisodeId")
+                        .IsUnique()
+                        .HasFilter("[EpisodeId] IS NOT NULL");
+
+                    b.ToTable("WatchableProgresses");
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Movie", b =>
+                {
+                    b.HasBaseType("MyRoot.Domain.Entities.Abstracts.Watchable");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time");
+
+                    b.HasDiscriminator().HasValue(1);
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Show", b =>
+                {
+                    b.HasBaseType("MyRoot.Domain.Entities.Abstracts.Watchable");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Episode", b =>
+                {
+                    b.HasOne("MyRoot.Domain.Entities.Season", "Season")
+                        .WithMany("Episodes")
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Season");
+                });
+
             modelBuilder.Entity("MyRoot.Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("MyRoot.Domain.Entities.User", "User")
@@ -97,9 +254,68 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("MyRoot.Domain.Entities.Season", b =>
+                {
+                    b.HasOne("MyRoot.Domain.Entities.Show", "Show")
+                        .WithMany("Seasons")
+                        .HasForeignKey("ShowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Show");
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.WatchableProgress", b =>
+                {
+                    b.HasOne("MyRoot.Domain.Entities.Episode", "Episode")
+                        .WithMany("WatchableProgresses")
+                        .HasForeignKey("EpisodeId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyRoot.Domain.Entities.User", "User")
+                        .WithMany("WatchableProgresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyRoot.Domain.Entities.Abstracts.Watchable", "Watchable")
+                        .WithMany("WatchableProgresses")
+                        .HasForeignKey("WatchableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Episode");
+
+                    b.Navigation("User");
+
+                    b.Navigation("Watchable");
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Abstracts.Watchable", b =>
+                {
+                    b.Navigation("WatchableProgresses");
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Episode", b =>
+                {
+                    b.Navigation("WatchableProgresses");
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Season", b =>
+                {
+                    b.Navigation("Episodes");
+                });
+
             modelBuilder.Entity("MyRoot.Domain.Entities.User", b =>
                 {
                     b.Navigation("RefreshTokens");
+
+                    b.Navigation("WatchableProgresses");
+                });
+
+            modelBuilder.Entity("MyRoot.Domain.Entities.Show", b =>
+                {
+                    b.Navigation("Seasons");
                 });
 #pragma warning restore 612, 618
         }

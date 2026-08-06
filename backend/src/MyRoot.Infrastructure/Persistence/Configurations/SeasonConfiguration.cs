@@ -10,6 +10,11 @@ namespace MyRoot.Infrastructure.Persistence.Configurations
         {
             builder.HasIndex(s => new { s.ShowId, s.SeasonNumber })
                 .IsUnique();
+
+            builder.HasOne(s => s.Show)
+                .WithMany(s => s.Seasons)
+                .HasForeignKey(s => s.ShowId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -7,6 +7,7 @@ using MyRoot.Application.DTOs;
 using Microsoft.OpenApi;
 using System.Text.Json;
 using System.Text;
+using MyRoot.API.Swagger;
 
 namespace MyRoot.API
 {
@@ -39,6 +40,11 @@ namespace MyRoot.API
                     Title = "API",
                     Version = null
                 });
+
+                options.DocInclusionPredicate((documentName, description)
+                    => description.HttpMethod != "QUERY");
+
+                options.DocumentFilter<QueryMethodFilter>();
             });
 
             return services;

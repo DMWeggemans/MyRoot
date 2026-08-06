@@ -9,7 +9,7 @@ namespace MyRoot.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(u => u.UserName)
-                    .IsRequired();
+                .IsRequired();
 
             builder.Property(u => u.Email)
                 .IsRequired();

@@ -12,5 +12,6 @@
 
         // Navigation Properties
         public List<RefreshToken> RefreshTokens { get; set; } = [];
+        public List<WatchableProgress> WatchableProgresses { get; set; } = [];
     }
 }

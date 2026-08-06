@@ -1,0 +1,15 @@
+﻿.opblock.opblock-query {
+    background: rgba(142, 68, 173, 0.1);
+    border-color: #8e44ad;
+}
+
+.opblock.opblock-query .opblock-summary {
+    border-color: #8e44ad;
+}
+
+.opblock.opblock-query .opblock-summary-method {
+    background: #8e44ad;
+    text-align: center;
+    min-width: 80px;
+    color: #fff;
+}
