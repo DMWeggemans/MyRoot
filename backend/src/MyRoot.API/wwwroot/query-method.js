@@ -1,104 +1,81 @@
-﻿let storage = [];
+﻿let queryPaths = [];
 
-(function () {
-    // --- 1. EXTRACT QUERY ENDPOINTS ONCE ---
-    function initializeQueryEndpointsCache() {
-        if (!window.ui) return;
+function initQueryPaths() {
+    if (!window.ui || queryPaths.length)
+        return;
 
-        try {
-            const fullSpec = window.ui.specSelectors.specJson().toJS();
-            const queryPaths = [];
+    try {
+        const specifications = window.ui.specSelectors.specJson().toJS();
+        if (!specifications || !specifications.paths)
+            return;
 
-            if (fullSpec && fullSpec.paths) {
-                Object.keys(fullSpec.paths).forEach(pathKey => {
-                    const pathData = fullSpec.paths[pathKey];
-                    // Match either the path-level extension or the fallback GET method extension
-                    const hasQueryExtension = pathData && (pathData['X-QUERY'] || pathData.get?.['X-QUERY']);
+        Object.keys(specifications.paths).forEach(key => {
+            const data = specifications.paths[key];
 
-                    if (hasQueryExtension) {
-                        // Store the path normalized to lowercase
-                        queryPaths.push(pathKey.toLowerCase());
-                    }
+            if (!data || !(data['X-QUERY'] || data.get?.['X-QUERY']))
+                return;
+
+            const tag = (data['X-QUERY']?.tags || data.get?.['X-QUERY']?.tags)[0];
+            const controller = document.querySelector(`div:has(> h3[data-tag="${tag}"])`);
+            const endpoints = controller.querySelector('.operation-tag-content');
+
+            endpoints.querySelectorAll('& > span > .opblock').forEach((element, index) => {
+                const method = element.querySelector('.opblock-summary-method')?.textContent;
+                const path = element.querySelector('.opblock-summary-path span')?.textContent;
+                if (method !== 'GET' || path !== key) return;
+
+                queryPaths.push({
+                    element: element,
+                    path: path
                 });
-            }
-
-            if (queryPaths.length > 0) {
-                storage = queryPaths;
-            }
-        } catch (e) {
-            console.error("Failed to parse and store custom query routes into cache:", e);
-        }
-    }
-
-    // Helper to check if a specific path is registered as a QUERY method
-    function isQueryMethodRoute(path) {
-        return storage.includes(path.toLowerCase());
-    }
-
-    // --- 2. GLOBAL NETWORK INTERCEPTOR (FETCH PROXY) ---
-    const originalFetch = window.fetch;
-    window.fetch = async function (...args) {
-        let [resource, config] = args;
-
-        if (config && config.method === 'GET') {
-            const urlString = typeof resource === 'string' ? resource : resource.url;
-
-            if (urlString) {
-                try {
-                    const urlObj = new URL(urlString, window.location.origin);
-                    const pathText = urlObj.pathname;
-
-                    // Instantly look up the path against the flat session storage collection
-                    if (isQueryMethodRoute(pathText)) {
-                        config.method = 'QUERY'; // Enforce actual HTTP verb payload over the wire
-                    }
-                } catch (e) {
-                    console.error("Fetch intercept error:", e);
-                }
-            }
-        }
-        return originalFetch.apply(this, args);
-    };
-
-    // --- 3. DYNAMIC LAYOUT OBSERVATION & VISUAL REWRITE ---
-    document.addEventListener('DOMContentLoaded', function () {
-        const observer = new MutationObserver(() => {
-            // Trigger specification caching as soon as Swagger UI is ready
-            if (window.ui) {
-                initializeQueryEndpointsCache();
-            }
-
-            const pathItems = document.querySelectorAll('.opblock-summary');
-            pathItems.forEach(summary => {
-                const pathText = summary.querySelector('.opblock-summary-path')?.getAttribute('data-path');
-                const methodBadge = summary.querySelector('.opblock-summary-method');
-
-                if (pathText && methodBadge && isQueryMethodRoute(pathText)) {
-                    // Force display badge text conversion
-                    if (methodBadge.textContent !== 'QUERY') {
-                        methodBadge.textContent = 'QUERY';
-                    }
-
-                    // Dynamically manage visual design classes
-                    const mainContainer = summary.closest('.opblock');
-                    if (mainContainer) {
-                        if (mainContainer.classList.contains('opblock-get')) {
-                            mainContainer.classList.remove('opblock-get');
-                        }
-                        if (!mainContainer.classList.contains('opblock-query')) {
-                            mainContainer.classList.add('opblock-query');
-                        }
-
-                        // Modify the cURL text command preview block
-                        const curlBlock = mainContainer.querySelector('.curl');
-                        if (curlBlock && curlBlock.textContent.includes("-X 'GET'")) {
-                            curlBlock.textContent = curlBlock.textContent.replace("-X 'GET'", "-X 'QUERY'");
-                        }
-                    }
-                }
             });
         });
+    } catch (error) {
+        console.error("Failed to get all query endpoints from Swagger UI!:", error);
+    }
+}
 
-        observer.observe(document.body, { childList: true, subtree: true });
+const originalFetch = window.fetch;
+window.fetch = async function (...args) {
+    const [resource, config] = args;
+    console.log(resource, config);
+
+    if (config && config.method === 'GET' && config.url) {
+        try {
+            const url = new URL(config.url, window.location.origin);
+            const path = url.pathname;
+
+            if (queryPaths.some(x => x.path === path))
+                config.method = 'QUERY';
+        } catch (error) {
+            console.error("Failed to intercept an endpoint from Swagger UI!:", error);
+        }
+    }
+
+    return originalFetch.apply(this, args);
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    const observer = new MutationObserver(() => {
+        initQueryPaths();
+
+        queryPaths.forEach(path => {
+            if (path.element.classList.contains('opblock-get'))
+                path.element.classList.remove('opblock-get');
+
+            if (!path.element.classList.contains('opblock-query'))
+                path.element.classList.add('opblock-query');
+
+            const method = path.element.querySelector('.opblock-summary-method');
+            if (method && method.textContent !== 'QUERY')
+                method.textContent = 'QUERY';
+
+            const curl = path.element.querySelector('.curl');
+            if (!curl || curl.textContent.includes("-X 'QUERY'")) return;
+
+            curl.textContent = curl.textContent.replace("-X 'GET'", "-X 'QUERY'");
+        });
     });
-})();
+
+    observer.observe(document.body, { childList: true, subtree: true });
+});

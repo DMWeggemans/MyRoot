@@ -1,6 +1,4 @@
-﻿using MyRoot.Application.Requests.Auth;
-using Microsoft.AspNetCore.Mvc;
-using MyRoot.API.Swagger;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace MyRoot.API.Controllers
 {
@@ -8,10 +6,6 @@ namespace MyRoot.API.Controllers
     [Route("[controller]")]
     public class WatchlistController : ControllerBase
     {
-        [HttpQuery]
-        public async Task<IActionResult> GetWatchables(LoginUserRequest request)
-        {
-            return StatusCode(500, request);
-        }
+        
     }
 }
