@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MyRoot.Domain.Entities.Watchables;
 using MyRoot.Domain.Entities.Abstracts;
 using Microsoft.EntityFrameworkCore;
-using MyRoot.Domain.Entities;
 using MyRoot.Domain.Enums;
 
 namespace MyRoot.Infrastructure.Persistence.Configurations
@@ -10,14 +10,15 @@ namespace MyRoot.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Watchable> builder)
         {
-            builder.HasIndex(w => w.Title);
-
             builder.Property(w => w.Title)
                 .IsRequired();
 
             builder.HasDiscriminator(w => w.Type)
-                .HasValue<Movie>(WatchableType.Movie)
-                .HasValue<Show>(WatchableType.Show);
+                .HasValue<WatchableCollection>(WatchableType.Collection)
+                .HasValue<WatchableMovie>(WatchableType.Movie)
+                .HasValue<WatchableShow>(WatchableType.Show)
+                .HasValue<WatchableSeason>(WatchableType.Season)
+                .HasValue<WatchableEpisode>(WatchableType.Episode);
         }
     }
 }

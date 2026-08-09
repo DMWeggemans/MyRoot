@@ -7,9 +7,9 @@ using MyRoot.Application.Extensions;
 using MyRoot.Application.DTOs.Auth;
 using System.Security.Cryptography;
 using MyRoot.Domain.Interfaces;
-using MyRoot.Domain.Entities;
 using System.Security.Claims;
 using System.Text;
+using MyRoot.Domain.Entities.Auth;
 
 namespace MyRoot.Application.Services.Auth
 {

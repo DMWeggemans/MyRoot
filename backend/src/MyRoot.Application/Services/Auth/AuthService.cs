@@ -4,7 +4,7 @@ using MyRoot.Application.DTOs.Auth;
 using MyRoot.Application.Extensions.Auth;
 using MyRoot.Application.Interfaces.Services.Auth;
 using MyRoot.Application.Requests.Auth;
-using MyRoot.Domain.Entities;
+using MyRoot.Domain.Entities.Auth;
 using MyRoot.Domain.Interfaces;
 using MyRoot.Domain.Interfaces.Services;
 

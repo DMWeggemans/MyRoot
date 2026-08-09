@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MyRoot.Application.Interfaces.Services.Watchables;
+using Microsoft.AspNetCore.Mvc;
 using MyRoot.API.Swagger;
 
 namespace MyRoot.API.Controllers
@@ -7,40 +8,23 @@ namespace MyRoot.API.Controllers
     [Route("[controller]")]
     public class WatchablesController : ControllerBase
     {
+        private readonly IWatchableService WatchableService;
+
+        public WatchablesController(IWatchableService watchableService)
+        {
+            WatchableService = watchableService;
+        }
+
         [HttpQuery]
         public async Task<IActionResult> GetWatchables()
         {
-            return StatusCode(500);
+            throw new NotImplementedException();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateWatchable()
+        public async Task<IActionResult> CreateList()
         {
-            return StatusCode(500);
-        }
-
-        [HttpQuery("Seasons")]
-        public async Task<IActionResult> GetSeasons()
-        {
-            return StatusCode(500);
-        }
-
-        [HttpPost("Seasons")]
-        public async Task<IActionResult> CreateSeason()
-        {
-            return StatusCode(500);
-        }
-
-        [HttpQuery("Episodes")]
-        public async Task<IActionResult> GetEpisodes()
-        {
-            return StatusCode(500);
-        }
-
-        [HttpPost("Episodes")]
-        public async Task<IActionResult> CreateEpisode()
-        {
-            return StatusCode(500);
+            throw new NotImplementedException();
         }
     }
 }

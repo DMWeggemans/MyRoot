@@ -1,4 +1,4 @@
-﻿namespace MyRoot.Domain.Entities
+﻿namespace MyRoot.Domain.Entities.Auth
 {
     public class RefreshToken
     {
