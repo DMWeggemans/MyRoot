@@ -12,7 +12,7 @@ using MyRoot.Infrastructure.Persistence;
 namespace MyRoot.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20260809200512_AddedWatchables")]
+    [Migration("20260809211640_AddedWatchables")]
     partial class AddedWatchables
     {
         /// <inheritdoc />
@@ -120,18 +120,6 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableCollection", b =>
-                {
-                    b.HasBaseType("MyRoot.Domain.Entities.Abstracts.Watchable");
-
-                    b.Property<Guid?>("CollectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("CollectionId");
-
-                    b.HasDiscriminator().HasValue(1);
-                });
-
             modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableEpisode", b =>
                 {
                     b.HasBaseType("MyRoot.Domain.Entities.Abstracts.Watchable");
@@ -147,31 +135,23 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("SeasonId");
 
-                    b.HasDiscriminator().HasValue(5);
+                    b.HasDiscriminator().HasValue(4);
                 });
 
             modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableMovie", b =>
                 {
                     b.HasBaseType("MyRoot.Domain.Entities.Abstracts.Watchable");
 
-                    b.Property<Guid?>("CollectionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
 
-                    b.HasIndex("CollectionId");
-
                     b.ToTable("Watchables", t =>
                         {
-                            t.Property("CollectionId")
-                                .HasColumnName("WatchableMovie_CollectionId");
-
                             t.Property("Duration")
                                 .HasColumnName("WatchableMovie_Duration");
                         });
 
-                    b.HasDiscriminator().HasValue(2);
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableSeason", b =>
@@ -186,25 +166,14 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("ShowId");
 
-                    b.HasDiscriminator().HasValue(4);
+                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableShow", b =>
                 {
                     b.HasBaseType("MyRoot.Domain.Entities.Abstracts.Watchable");
 
-                    b.Property<Guid?>("CollectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("CollectionId");
-
-                    b.ToTable("Watchables", t =>
-                        {
-                            t.Property("CollectionId")
-                                .HasColumnName("WatchableShow_CollectionId");
-                        });
-
-                    b.HasDiscriminator().HasValue(3);
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("MyRoot.Domain.Entities.Auth.RefreshToken", b =>
@@ -218,15 +187,6 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableCollection", b =>
-                {
-                    b.HasOne("MyRoot.Domain.Entities.Watchables.WatchableCollection", "Collection")
-                        .WithMany()
-                        .HasForeignKey("CollectionId");
-
-                    b.Navigation("Collection");
-                });
-
             modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableEpisode", b =>
                 {
                     b.HasOne("MyRoot.Domain.Entities.Watchables.WatchableSeason", "Season")
@@ -236,15 +196,6 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Season");
-                });
-
-            modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableMovie", b =>
-                {
-                    b.HasOne("MyRoot.Domain.Entities.Watchables.WatchableCollection", "Collection")
-                        .WithMany()
-                        .HasForeignKey("CollectionId");
-
-                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableSeason", b =>
@@ -258,23 +209,9 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                     b.Navigation("Show");
                 });
 
-            modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableShow", b =>
-                {
-                    b.HasOne("MyRoot.Domain.Entities.Watchables.WatchableCollection", "Collection")
-                        .WithMany("Watchables")
-                        .HasForeignKey("CollectionId");
-
-                    b.Navigation("Collection");
-                });
-
             modelBuilder.Entity("MyRoot.Domain.Entities.Auth.User", b =>
                 {
                     b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableCollection", b =>
-                {
-                    b.Navigation("Watchables");
                 });
 
             modelBuilder.Entity("MyRoot.Domain.Entities.Watchables.WatchableSeason", b =>

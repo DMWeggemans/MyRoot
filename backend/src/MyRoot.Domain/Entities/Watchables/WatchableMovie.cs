@@ -7,12 +7,6 @@ namespace MyRoot.Domain.Entities.Watchables
     {
         public TimeSpan Duration { get; set; }
 
-        // Navigation Keys
-        public Guid? CollectionId { get; set; }
-
-        // Navigation Properties
-        public WatchableCollection? Collection { get; set; }
-
         public WatchableMovie() => Type = WatchableType.Movie;
     }
 }

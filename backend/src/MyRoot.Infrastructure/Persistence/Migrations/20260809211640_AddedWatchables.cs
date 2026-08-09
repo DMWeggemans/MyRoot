@@ -21,24 +21,16 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                     SortIndex = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CollectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Duration = table.Column<TimeSpan>(type: "time", nullable: true),
                     EpisodeNumber = table.Column<int>(type: "int", nullable: true),
                     SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     WatchableMovie_Duration = table.Column<TimeSpan>(type: "time", nullable: true),
-                    WatchableMovie_CollectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     SeasonNumber = table.Column<int>(type: "int", nullable: true),
-                    ShowId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    WatchableShow_CollectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ShowId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Watchables", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Watchables_Watchables_CollectionId",
-                        column: x => x.CollectionId,
-                        principalTable: "Watchables",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Watchables_Watchables_SeasonId",
                         column: x => x.SeasonId,
@@ -51,22 +43,7 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                         principalTable: "Watchables",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Watchables_Watchables_WatchableMovie_CollectionId",
-                        column: x => x.WatchableMovie_CollectionId,
-                        principalTable: "Watchables",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Watchables_Watchables_WatchableShow_CollectionId",
-                        column: x => x.WatchableShow_CollectionId,
-                        principalTable: "Watchables",
-                        principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Watchables_CollectionId",
-                table: "Watchables",
-                column: "CollectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Watchables_SeasonId",
@@ -77,16 +54,6 @@ namespace MyRoot.Infrastructure.Persistence.Migrations
                 name: "IX_Watchables_ShowId",
                 table: "Watchables",
                 column: "ShowId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Watchables_WatchableMovie_CollectionId",
-                table: "Watchables",
-                column: "WatchableMovie_CollectionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Watchables_WatchableShow_CollectionId",
-                table: "Watchables",
-                column: "WatchableShow_CollectionId");
         }
 
         /// <inheritdoc />

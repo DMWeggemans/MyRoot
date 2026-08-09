@@ -2,10 +2,9 @@
 {
     public enum WatchableType
     {
-        Collection = 1,
-        Movie = 2,
-        Show = 3,
-        Season = 4,
-        Episode = 5
+        Movie = 1,
+        Show = 2,
+        Season = 3,
+        Episode = 4
     }
 }

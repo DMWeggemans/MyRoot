@@ -14,7 +14,6 @@ namespace MyRoot.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.HasDiscriminator(w => w.Type)
-                .HasValue<WatchableCollection>(WatchableType.Collection)
                 .HasValue<WatchableMovie>(WatchableType.Movie)
                 .HasValue<WatchableShow>(WatchableType.Show)
                 .HasValue<WatchableSeason>(WatchableType.Season)
