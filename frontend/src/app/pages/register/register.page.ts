@@ -1,4 +1,4 @@
-import { ValidationMessageComponent } from '../../components/validation-message.component/validation-message.component';
+import { ValidationMessageComponent } from '../../components/validation-message/validation-message.component';
 import { RegisterUserRequest } from '../../shared/clients/auth/auth.types';
 import { FieldTree, FormField, FormRoot } from '@angular/forms/signals';
 import { createError } from '../../shared/helpers/validation.helpers';

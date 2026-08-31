@@ -4,9 +4,22 @@
     margin: 0;
 }
 
-a.disabled {
-    pointer-events: none;
-    cursor: default;
-    color: gray;
-    text-decoration: none;
+a {
+    display: block;
+}
+
+button {
+    cursor: pointer;
+    display: block;
+    border: none;
+}
+
+.container {
+    flex-direction: column;
+    min-height: 100vh;
+    display: flex;
+
+    main {
+        flex: 1;
+    }
 }
