@@ -60,32 +60,53 @@ main {
 
     .item {
         background-color: var(--tertiary-color);
+        justify-content: space-between;
         border-radius: 0.625rem;
         aspect-ratio: 1.18 / 1;
+        flex-direction: column;
         overflow: hidden;
+        display: flex;
         width: 100%;
 
-        img {
-            height: 47.5%;
-            width: 100%;
+        .top {
+            flex-direction: column;
+            display: flex;
+            flex: 1;
+
+            .image {
+                background-image: var(--image);
+                background-repeat: no-repeat;
+                background-position: top;
+                background-size: cover;
+                width: 100%;
+                flex: 1;
+            }
+
+            .game-title {
+                text-overflow: ellipsis;
+                padding: 1rem 0.5rem;
+                white-space: nowrap;
+                overflow: hidden;
+            }
         }
 
-        .game-title {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 1.25rem;
-            margin: 1.125rem;
-            overflow: hidden;
-        }
-
-        .user-count {
-            padding: 0.6875rem;
-            gap: 0.6875rem;
+        .bottom {
+            background-color: var(--quaternary-color);
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            height: 1.8rem;
             display: flex;
 
-            owned-icon {
-                display: block;
-                width: 1rem;
+            .user-count {
+                align-items: center;
+                gap: 0.3125rem;
+                display: flex;
+                height: 100%;
+
+                owned-icon {
+                    display: block;
+                    height: 100%;
+                }
             }
         }
     }
