@@ -1,9 +1,4 @@
 header {
-    --primary-color: #FFFFFF;
-    --secondary-color: #F5F5F5;
-    --tertiary-color: #ECECEC;
-    --quaternary-color: #D9D9D9;
-
     background-color: var(--secondary-color);
     padding: 0.5rem;
     height: 3.75rem;

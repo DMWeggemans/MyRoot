@@ -29,7 +29,7 @@
                 </div>
                 <div class="items">
                     @for (item of items(); track $index) {
-                        <div class="item">
+                        <a [routerLink]="`/games/${item.id}`" class="item">
                             <div class="top">
                                 <div class="image" [style]="`--image: url(${item.image})`"></div>
                                 <p class="game-title" [title]="item.title">{{ item.title }}</p>
@@ -40,12 +40,18 @@
                                     <p>{{ item.owned }}</p>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     }
                 </div>
             </div>
-            <div class="filters">
+            <div class="content">
+                <div class="filters">
 
+                </div>
+                <div class="results">
+                    <info-icon></info-icon>
+                    <p>11728 results</p>
+                </div>
             </div>
         </div>
     </main>
