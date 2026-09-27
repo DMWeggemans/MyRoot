@@ -1,0 +1,36 @@
+<a [routerLink]="`/games/${game().id}`" class="game-card">
+    <section class="game-image">
+        <img [src]="game().image" alt="Game Banner">
+    </section>
+    <section class="game-title">
+        <p>{{ game().title }}</p>
+    </section>
+    <section class="game-details">
+        @let totalTime = toReadableDate(game().statistics.totalTime);
+        @let totalOwned = toReadableNumber(game().statistics.totalOwned);
+        @let totalLiked = toReadableNumber(game().statistics.totalLiked);
+        @let totalViews = toReadableNumber(game().statistics.totalViews);
+        @let totalRating = toDecimal(game().statistics.totalRating);
+
+        <div class="game-detail total-time" [title]="`Uploaded ${totalTime}`">
+            <clock-icon />
+            <p>{{ totalTime }}</p>
+        </div>
+        <div class="game-detail total-owned" [title]="`${totalOwned} owns this game`">
+            <community-fill-icon />
+            <p>{{ totalOwned }}</p>
+        </div>
+        <div class="game-detail total-liked" [title]="`${totalLiked} liked this game`">
+            <thumbs-up-fill-icon />
+            <p>{{ totalLiked }}</p>
+        </div>
+        <div class="game-detail total-views" [title]="`${totalViews} times has this game been viewed`">
+            <eye-icon />
+            <p>{{ totalViews }}</p>
+        </div>
+        <div class="game-detail total-rating" [title]="`${totalRating} has been given to this game`">
+            <star-fill-icon />
+            <p>{{ totalRating }}</p>
+        </div>
+    </section>
+</a>

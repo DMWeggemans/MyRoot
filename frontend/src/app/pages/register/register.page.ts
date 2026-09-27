@@ -2,7 +2,7 @@ import { ValidationMessageComponent } from '../../components/validation-message/
 import { RegisterUserRequest } from '../../shared/clients/auth/auth.types';
 import { FieldTree, FormField, FormRoot } from '@angular/forms/signals';
 import { createError } from '../../shared/helpers/validation.helpers';
-import { AuthService } from '../../features/auth/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { signalForm } from '../../shared/helpers/form.helpers';
 import { Router, RouterLink } from '@angular/router';
 import { Component, inject } from '@angular/core';

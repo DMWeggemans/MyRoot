@@ -4,47 +4,23 @@
     margin: 0;
 }
 
-:root {
-    --primary-color: #FFFFFF;
-    --secondary-color: #F5F5F5;
-    --tertiary-color: #ECECEC;
-    --quaternary-color: #D9D9D9;
+body {
+    overflow-x: hidden;
 }
 
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: var(--primary-color);
+img {
+    display: block;
+    width: 100%;
 }
 
 a {
     text-decoration: none;
-    display: block;
     color: inherit;
 }
 
 button {
+    background: none;
     cursor: pointer;
-    display: block;
+    font: inherit;
     border: none;
-}
-
-.container {
-    flex-direction: column;
-    min-height: 100vh;
-    display: flex;
-
-    main {
-        flex: 1;
-    }
-}
-
-app-games {
-    .page-size-input {
-        background-color: transparent;
-        text-align: center;
-        padding: 0.25rem;
-        height: 100%;
-        border: none;
-        width: 100%;
-    }
 }

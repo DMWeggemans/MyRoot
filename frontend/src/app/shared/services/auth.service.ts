@@ -1,5 +1,5 @@
-import { AuthorizedValues, LoginUserRequest, RegisterUserRequest } from "../../shared/clients/auth/auth.types";
-import { AuthClient } from "../../shared/clients/auth/auth.client";
+import { AuthorizedValues, LoginUserRequest, RegisterUserRequest } from "../clients/auth/auth.types";
+import { AuthClient } from "../clients/auth/auth.client";
 import { inject, Injectable, signal } from "@angular/core";
 
 @Injectable({ providedIn: 'root' })

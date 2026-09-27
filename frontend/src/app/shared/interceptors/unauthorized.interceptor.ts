@@ -1,5 +1,5 @@
 import { catchError, from, switchMap, throwError } from 'rxjs';
-import { AuthService } from '../../features/auth/auth.service';
+import { AuthService } from '../services/auth.service';
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { Result } from '../clients/base.types';
 import { inject } from '@angular/core';

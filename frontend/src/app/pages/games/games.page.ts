@@ -1,68 +1,55 @@
-import { HeaderComponent } from '../../components/header/header.component';
-import { ArrowRightIcon } from '../../icons/arrow-right/arrow-right.icon';
-import { ArrowLeftIcon } from '../../icons/arrow-left/arrow-left.icon';
-import { Component, computed, signal } from '@angular/core';
-import { OwnedIcon } from '../../icons/owned/owned.icon';
-import { InfoIcon } from '../../icons/info/info.icon';
-import { RouterLink } from "@angular/router";
+import { GameCardComponent } from '../../components/game-card/game-card.component';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-games.page',
-  standalone: true,
-  imports: [ArrowLeftIcon, ArrowRightIcon, OwnedIcon, InfoIcon, HeaderComponent, RouterLink],
-  templateUrl: './games.page.html',
-  styleUrl: './games.page.css',
+    selector: 'app-games.page',
+    standalone: true,
+    imports: [GameCardComponent],
+    templateUrl: './games.page.html',
+    styleUrl: './games.page.css',
 })
 export class GamesPage {
-  public pageSize = signal<number | null>(12);
+    public games: any = [{
+        id: "1",
+        image: "https://image.api.playstation.com/vulcan/ap/rnd/202407/1020/91fe046f742042e3b31e57f7731dbe2226e1fd1e02a36223.jpg",
+        title: "This is a game title",
+        statistics: {
+            totalOwned: 508943,
+            totalLiked: 508943 - 19552,
+            totalViews: 508943 + 129523,
+            totalRating: 4.9
+        }
+    }, {
+        id: "2",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkLIX6ZMa2mHSRdgWxOwOHJjAQhI_GffsjqXKoyuZb6KbbMvlhlv5usE5E&s=10",
+        title: "This is a game title",
+        statistics: {
+            totalOwned: 958934,
+            totalLiked: 958934 - 4385,
+            totalViews: 958934 + 324895,
+            totalRating: 5
+        }
+    }, {
+        id: "3",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-fWlmX2KRTZfBUnbkbhm98gKLdLtPxmdAaxI3DupU55XHUyPtSx2Kyj4&s=10",
+        title: "This is a game title",
+        statistics: {
+            totalOwned: 8949395,
+            totalLiked: 8949395 - 584392,
+            totalViews: 8949395 + 59472957,
+            totalRating: 4.2
+        }
+    }];
 
-  public items = computed(() => Array.from({ length: this.pageSize() ?? 0 }, (_, index) => ({
-    id: `${index + 1}`,
-    title: "This is a super really big game title.",
-    owned: 533952,
-    image: "https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/Homepage_Collectables-Carousel-H_Java-Bedrock_414x414_01.jpg"
-  })));
+    public array = (number: number) => Array.from({ length: number });
 
-  public setPageSize(number: number) {
-    const pageSize = this.pageSize() !== number
-      ? (!Number.isNaN(number)
-        ? number
-        : 12)
-      : null;
-    this.pageSize.set(pageSize);
-  }
+    ngOnInit() {
+        for (const game of this.games) {
+            const totalTime = new Date();
+            totalTime.setUTCDate(totalTime.getUTCDate() - Math.round(Math.random() * 28));
 
-  public setCustomPageSize(event: Event) {
-    const target = event.target as HTMLElement;
-    const isOpen = target.innerHTML === "...";
-    if (!isOpen) return;
-
-    target.innerHTML = "";
-    const element = document.createElement('input');
-    element.type = "text";
-    element.classList.add("page-size-input");
-
-    const handleBlur = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      if (!target.parentElement) return;
-      target.parentElement.innerHTML = "...";
-    };
-
-    element.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.key !== 'Enter') return;
-
-      const target = event.target as HTMLInputElement;
-      if (!target.parentElement) return;
-
-      const value = Number(target.value.trim() || NaN);
-      this.setPageSize(value);
-      target.removeEventListener('blur', handleBlur);
-      target.parentElement.innerHTML = "...";
-    });
-
-    element.addEventListener('blur', handleBlur);
-
-    target.appendChild(element);
-    element.focus();
-  }
+            game.statistics.totalTime = totalTime;
+            console.log(game);
+        }
+    }
 }

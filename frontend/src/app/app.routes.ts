@@ -4,7 +4,6 @@ import { unauthGuard } from './shared/guards/unauth.guard';
 import { authGuard } from './shared/guards/auth.guard';
 import { LoginPage } from './pages/login/login.page';
 import { GamesPage } from './pages/games/games.page';
-import { GamePage } from './pages/game/game.page';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
@@ -31,12 +30,6 @@ export const routes: Routes = [
     {
         path: 'games',
         component: GamesPage,
-        // canActivate: [authGuard]
-    },
-    {
-        path: 'games/:id',
-        component: GamePage,
-        // canActivate: [authGuard]
     },
     {
         path: '**',
