@@ -1,5 +1,21 @@
+.games-container {
+    min-height: calc(100vh - 100px); /* header: 60px, margin-y: 40px */
+    margin: 20px 50px;
+    display: flex;
+}
+
+.games-view {
+    min-height: 100%;
+    flex: 1;
+}
+
 .games {
     grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    min-height: 100%;
     display: grid;
     gap: 20px;
+
+    &.has-message {
+        place-items: center;
+    }
 }

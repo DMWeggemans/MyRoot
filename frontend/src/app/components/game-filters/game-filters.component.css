@@ -1,0 +1,110 @@
+.games-filters {
+    border: 1px solid lightgrey;
+    transition: width 500ms;
+    flex-direction: column;
+    height: fit-content;
+    border-radius: 5px;
+    margin-left: 50px;
+    max-width: 274px;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.games-filter {
+    flex-direction: column;
+    display: flex;
+    gap: 5px;
+}
+
+.games-filter-names {
+    justify-content: space-between;
+    display: flex;
+}
+
+.games-filter-name.options {
+    display: flex;
+    gap: 5px;
+
+    :not(.selected) {
+        color: lightgrey;
+    }
+}
+
+.games-filter-choice {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .games-filter-option {
+        padding: 15px;
+
+        &:hover {
+            background-color: lightgrey;
+        }
+
+        &.selected {
+            background-color: darkgrey;
+        }
+    }
+}
+
+.games-filter-text {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.games-filter-datalist {
+    position: relative;
+
+    &:has(.games-filter-text:focus) .games-filter-list:not(.closing),
+    .games-filter-list:focus:not(.closing),
+    .games-filter-list:has(*:hover):not(.closing) {
+        display: block;
+    }
+}
+
+.games-filter-list {
+    border: 1px solid lightgrey;
+    background-color: white;
+    border-radius: 5px;
+    position: absolute;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+    width: 100%;
+    z-index: 1;
+    top: 37px;
+
+    .games-filter-option {
+        text-align: start;
+        padding: 5px;
+        width: 100%;
+
+        &:hover {
+            background-color: lightgrey;
+        }
+    }
+}
+
+.games-filter-tags {
+    flex-wrap: wrap;
+    display: flex;
+    gap: 5px;
+}
+
+.games-filter-tag {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 6px 8px;
+
+    &:hover {
+        background-color: grey;
+    }
+
+    .close-icon {
+        margin-left: 20px;
+    }
+}

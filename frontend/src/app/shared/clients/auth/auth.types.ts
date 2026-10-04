@@ -1,15 +1,15 @@
-export type AuthorizedValues = {
+export interface AuthorizedValues {
     id: string;
     expiresOn: Date;
 }
 
 // Requests
-export type LoginUserRequest = {
+export interface LoginUserRequest {
     user: string;
     password: string;
 }
 
-export type RegisterUserRequest = {
+export interface RegisterUserRequest {
     userName: string;
     email: string;
     password: string;

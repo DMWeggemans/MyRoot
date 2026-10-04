@@ -1,5 +1,22 @@
-<div class="games">
-    @for (item of array(8); track $index) {
-        <game-card [game]="games[$index % 3]"/>
-    }
+<div class="games-container">
+    <div class="games-view">
+        @if (isLoading() || !games().length) {
+            <div class="games has-message">
+                @if (isLoading()) {
+                    <p class="games-message">Loading..</p>
+                }
+                @else if (!games().length) {
+                    <p class="games-message">No games were found.</p>
+                }
+            </div>
+        }
+        @else {
+            <div class="games">
+                @for (game of games(); track $index) {
+                    <game-card [game]="game"/>
+                }
+            </div>
+        }
+    </div>
+    <game-filters [(filters)]="filters" (filtersChange)="getGames()" />
 </div>

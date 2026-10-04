@@ -1,0 +1,82 @@
+<div class="games-filters">
+    <div class="games-filter">
+        <div class="games-filter-names">
+            <p class="games-filter-name">Sorting</p>
+            <p class="games-filter-name options">
+                <button [class.selected]="filters().sortDirection === 'ascending'" (click)="setValue('sortDirection', 'ascending')">ASC</button>
+                <span>/</span>
+                <button [class.selected]="filters().sortDirection === 'descending'" (click)="setValue('sortDirection', 'descending')">DESC</button>
+            </p>
+        </div>
+        <div class="games-filter-choice">
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'created-on'" (click)="setValue('sortBy', 'created-on')">
+                <clock-icon />
+            </button>
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'likes'" (click)="setValue('sortBy', 'likes')">
+                <thumbs-up-fill-icon />
+            </button>
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'views'" (click)="setValue('sortBy', 'views')">
+                <eye-icon />
+            </button>
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'title'" (click)="setValue('sortBy', 'title')">
+                <alphabet-icon />
+            </button>
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'favorites'" (click)="setValue('sortBy', 'favorites')">
+                <star-fill-icon />
+            </button>
+        </div>
+    </div>
+    <div class="games-filter">
+        <p class="games-filter-name">Search</p>
+        <input type="text" class="games-filter-text" [value]="filters().searchBy" (change)="setValue('searchBy', $any($event.target).value)">
+    </div>
+    <div class="games-filter">
+        <div class="games-filter-names">
+            <p class="games-filter-name">Include Tags</p>
+            <p class="games-filter-name options">
+                <button [class.selected]="filters().includeTagsProcess === 'and'" (click)="setValue('includeTagsProcess', 'and')">AND</button>
+                <span>/</span>
+                <button [class.selected]="filters().includeTagsProcess === 'or'" (click)="setValue('includeTagsProcess', 'or')">OR</button>
+            </p>
+        </div>
+        <div class="games-filter-datalist">
+            <input type="text" class="games-filter-text" [value]="includeTags.query()" (input)="includeTags.query.set($event.target.value)">
+            @if (includeTags.filtered().length) {
+                <div class="games-filter-list">
+                    @for (tag of includeTags.filtered(); track $index) {
+                        <button class="games-filter-option" (click)="setTag('include', tag, $event)">{{ tag }}</button>
+                    }
+                </div>
+            }
+        </div>
+        <div class="games-filter-tags">
+            @for (tag of filters().includeTags; track $index) {
+                <button class="games-filter-tag" (click)="setTag('include', tag)">
+                    <span>{{ tag }}</span>
+                    <span class="close-icon">x</span>
+                </button>
+            }
+        </div>
+    </div>
+    <div class="games-filter">
+        <p class="games-filter-name">Exclude Tags</p>
+        <div class="games-filter-datalist">
+            <input type="text" class="games-filter-text" [value]="excludeTags.query()" (input)="excludeTags.query.set($event.target.value)">
+            @if (excludeTags.filtered().length) {
+                <div class="games-filter-list">
+                    @for (tag of excludeTags.filtered(); track $index) {
+                        <button class="games-filter-option" (click)="setTag('exclude', tag, $event)">{{ tag }}</button>
+                    }
+                </div>
+            }
+        </div>
+        <div class="games-filter-tags">
+            @for (tag of filters().excludeTags; track $index) {
+                <button class="games-filter-tag" (click)="setTag('exclude', tag)">
+                    <span>{{ tag }}</span>
+                    <span class="close-icon">x</span>
+                </button>
+            }
+        </div>
+    </div>
+</div>

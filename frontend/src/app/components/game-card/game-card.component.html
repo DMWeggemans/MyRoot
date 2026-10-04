@@ -1,36 +1,33 @@
 <a [routerLink]="`/games/${game().id}`" class="game-card">
     <section class="game-image">
-        <img [src]="game().image" alt="Game Banner">
+        <img [src]="game().imageUrl" alt="Game Banner">
     </section>
     <section class="game-title">
         <p>{{ game().title }}</p>
     </section>
     <section class="game-details">
-        @let totalTime = toReadableDate(game().statistics.totalTime);
-        @let totalOwned = toReadableNumber(game().statistics.totalOwned);
-        @let totalLiked = toReadableNumber(game().statistics.totalLiked);
-        @let totalViews = toReadableNumber(game().statistics.totalViews);
-        @let totalRating = toDecimal(game().statistics.totalRating);
+        @let uploadedOn = toReadableDate(game().statistics.uploadedOn);
+        @let rating = toDecimal(game().statistics.rating);
 
-        <div class="game-detail total-time" [title]="`Uploaded ${totalTime}`">
+        <div class="game-detail total-time" [title]="`Uploaded ${uploadedOn}`">
             <clock-icon />
-            <p>{{ totalTime }}</p>
+            <p>{{ uploadedOn }}</p>
         </div>
-        <div class="game-detail total-owned" [title]="`${totalOwned} owns this game`">
+        <div class="game-detail total-owned" [title]="`${toReadableDigit(game().statistics.totalOwned)} owns this game`">
             <community-fill-icon />
-            <p>{{ totalOwned }}</p>
+            <p>{{ toReadableNumber(game().statistics.totalOwned) }}</p>
         </div>
-        <div class="game-detail total-liked" [title]="`${totalLiked} liked this game`">
+        <div class="game-detail total-liked" [title]="`${toReadableDigit(game().statistics.totalLiked)} liked this game`">
             <thumbs-up-fill-icon />
-            <p>{{ totalLiked }}</p>
+            <p>{{ toReadableNumber(game().statistics.totalLiked) }}</p>
         </div>
-        <div class="game-detail total-views" [title]="`${totalViews} times has this game been viewed`">
+        <div class="game-detail total-views" [title]="`${toReadableDigit(game().statistics.totalViews)} times has this game been viewed`">
             <eye-icon />
-            <p>{{ totalViews }}</p>
+            <p>{{ toReadableNumber(game().statistics.totalViews) }}</p>
         </div>
-        <div class="game-detail total-rating" [title]="`${totalRating} has been given to this game`">
+        <div class="game-detail total-rating" [title]="`${rating} has been given to this game`">
             <star-fill-icon />
-            <p>{{ totalRating }}</p>
+            <p>{{ rating }}</p>
         </div>
     </section>
 </a>
