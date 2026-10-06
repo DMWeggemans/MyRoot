@@ -1,5 +1,6 @@
 <div class="games-container">
     <div class="games-view">
+        <game-pagination [filterResponse]="filterResponse()" [(filters)]="filters" (filtersChange)="waitAndGetGames()" />
         @if (isLoading() || !games().length) {
             <div class="games has-message">
                 @if (isLoading()) {
@@ -17,6 +18,7 @@
                 }
             </div>
         }
+        <game-pagination [filterResponse]="filterResponse()" [(filters)]="filters" (filtersChange)="waitAndGetGames()" />
     </div>
-    <game-filters [(filters)]="filters" (filtersChange)="getGames()" />
+    <game-filters [(filters)]="filters" (filtersChange)="waitAndGetGames()" />
 </div>

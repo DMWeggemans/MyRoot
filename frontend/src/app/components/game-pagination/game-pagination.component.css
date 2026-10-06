@@ -1,0 +1,48 @@
+.games-pagination {
+    justify-content: space-between;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+}
+
+.games-pagination-side {
+    grid-auto-flow: column;
+    display: grid;
+    gap: 5px;
+}
+
+.games-pagination-button {
+    font-size: clamp(0.5rem, 2vw, 0.9rem);
+    border: 1px solid lightgrey;
+    aspect-ratio: 1 / 1;
+    place-items: center;
+    border-radius: 5px;
+    overflow: hidden;
+    padding: 10px 0;
+    display: grid;
+    width: 40px;
+
+    &:hover {
+        background-color: lightgrey;
+    }
+
+    &.selected {
+        background-color: darkgrey;
+    }
+
+    &.contains-input {
+        padding: 0;
+    }
+}
+
+.games-pagination-input {
+    text-align: center;
+    height: 100%;
+    border: none;
+    width: 100%;
+
+    &:focus {
+        outline: none;
+    }
+}

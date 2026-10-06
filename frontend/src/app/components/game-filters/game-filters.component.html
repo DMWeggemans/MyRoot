@@ -2,26 +2,26 @@
     <div class="games-filter">
         <div class="games-filter-names">
             <p class="games-filter-name">Sorting</p>
-            <p class="games-filter-name options">
-                <button [class.selected]="filters().sortDirection === 'ascending'" (click)="setValue('sortDirection', 'ascending')">ASC</button>
+            <button class="games-filter-name options" (click)="toggleValue('sortDirection', 'ascending', 'descending')">
+                <span [class.selected]="filters().sortDirection === 'ascending'">ASC</span>
                 <span>/</span>
-                <button [class.selected]="filters().sortDirection === 'descending'" (click)="setValue('sortDirection', 'descending')">DESC</button>
-            </p>
+                <span [class.selected]="filters().sortDirection === 'descending'">DESC</span>
+            </button>
         </div>
         <div class="games-filter-choice">
-            <button class="games-filter-option" [class.selected]="filters().sortBy === 'created-on'" (click)="setValue('sortBy', 'created-on')">
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'updated-on'" title="Updated On" (click)="setValue('sortBy', 'updated-on')">
                 <clock-icon />
             </button>
-            <button class="games-filter-option" [class.selected]="filters().sortBy === 'likes'" (click)="setValue('sortBy', 'likes')">
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'likes'" title="Likes" (click)="setValue('sortBy', 'likes')">
                 <thumbs-up-fill-icon />
             </button>
-            <button class="games-filter-option" [class.selected]="filters().sortBy === 'views'" (click)="setValue('sortBy', 'views')">
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'views'" title="Views" (click)="setValue('sortBy', 'views')">
                 <eye-icon />
             </button>
-            <button class="games-filter-option" [class.selected]="filters().sortBy === 'title'" (click)="setValue('sortBy', 'title')">
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'title'" title="Title" (click)="setValue('sortBy', 'title')">
                 <alphabet-icon />
             </button>
-            <button class="games-filter-option" [class.selected]="filters().sortBy === 'favorites'" (click)="setValue('sortBy', 'favorites')">
+            <button class="games-filter-option" [class.selected]="filters().sortBy === 'rating'" title="Rating" (click)="setValue('sortBy', 'rating')">
                 <star-fill-icon />
             </button>
         </div>
@@ -33,11 +33,11 @@
     <div class="games-filter">
         <div class="games-filter-names">
             <p class="games-filter-name">Include Tags</p>
-            <p class="games-filter-name options">
-                <button [class.selected]="filters().includeTagsProcess === 'and'" (click)="setValue('includeTagsProcess', 'and')">AND</button>
+            <button class="games-filter-name options" (click)="toggleValue('includeTagsProcess', 'and', 'or')">
+                <span [class.selected]="filters().includeTagsProcess === 'and'">AND</span>
                 <span>/</span>
-                <button [class.selected]="filters().includeTagsProcess === 'or'" (click)="setValue('includeTagsProcess', 'or')">OR</button>
-            </p>
+                <span [class.selected]="filters().includeTagsProcess === 'or'">OR</span>
+            </button>
         </div>
         <div class="games-filter-datalist">
             <input type="text" class="games-filter-text" [value]="includeTags.query()" (input)="includeTags.query.set($event.target.value)">

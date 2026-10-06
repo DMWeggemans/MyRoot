@@ -1,0 +1,20 @@
+<div class="games-pagination">
+    <div class="games-pagination-side">
+        <button class="games-pagination-button" (click)="addPage(-1)">&lt;</button>
+        @for (page of pageSizes; track $index) {
+            @if (page > 0) {
+                <button class="games-pagination-button" [class.selected]="page === filters().page" (click)="setPage(page)">{{ toReadableNumber(page) }}</button>
+            }
+            @else {
+                <button class="games-pagination-button" (click)="enableInput($event)">...</button>
+            }
+        }
+        <button class="games-pagination-button" (click)="addPage(1)">></button>
+    </div>
+    <div class="games-pagination-side">
+        <button class="games-pagination-button" [class.selected]="filters().pageSize === 12" (click)="setPageSize(12)">12</button>
+        <button class="games-pagination-button" [class.selected]="filters().pageSize === 24" (click)="setPageSize(24)">24</button>
+        <button class="games-pagination-button" [class.selected]="filters().pageSize === 32" (click)="setPageSize(32)">32</button>
+        <button class="games-pagination-button" [class.selected]="filters().pageSize === 40" (click)="setPageSize(40)">40</button>
+    </div>
+</div>

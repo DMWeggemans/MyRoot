@@ -29,6 +29,15 @@ export class GameFiltersComponent {
         }));
     }
 
+    public toggleValue(key: keyof GameFilters, value1: string, value2: string) {
+        if (this.filters()[key] === value1) {
+            this.setValue(key, value2);
+            return;
+        }
+
+        this.setValue(key, value1);
+    }
+
     public setTag(type: 'include' | 'exclude', tag: string, event?: Event) {
         const key: keyof GameFilters = `${type}Tags`;
 

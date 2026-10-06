@@ -1,3 +1,5 @@
+import { FilterResponse } from "../base.types";
+
 export interface AbstractGame {
     id: string;
     title: string;
@@ -20,4 +22,12 @@ export interface GameFilters {
     includeTags: string[];
     includeTagsProcess: 'and' | 'or'
     excludeTags: string[];
+    pageSize: number;
+    page: number;
+}
+
+// Responses
+export interface GetGamesResponse {
+    games: AbstractGame[];
+    filters: FilterResponse;
 }
