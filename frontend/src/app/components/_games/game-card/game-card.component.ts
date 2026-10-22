@@ -1,10 +1,10 @@
-import { CommunityFillIcon } from '../../icons/community-fill/community-fill.icon';
-import { ThumbsUpFillIcon } from '../../icons/thumbs-up-fill/thumbs-up-fill.icon';
-import { getRelativeTimeString } from '../../shared/helpers/date.helpers';
-import { AbstractGame } from '../../shared/clients/games/games.types';
-import { StarFillIcon } from '../../icons/star-fill/star-fill.icon';
-import { ClockIcon } from '../../icons/clock/clock';
-import { EyeIcon } from '../../icons/eye/eye.icon';
+import { CommunityFillIcon } from '../../../icons/community-fill/community-fill.icon';
+import { ThumbsUpFillIcon } from '../../../icons/thumbs-up-fill/thumbs-up-fill.icon';
+import { AbstractGame } from '../../../shared/clients/games/games.types';
+import { StarFillIcon } from '../../../icons/star-fill/star-fill.icon';
+import { DateHelper } from '../../../shared/helpers/date.helpers';
+import { ClockIcon } from '../../../icons/clock/clock';
+import { EyeIcon } from '../../../icons/eye/eye.icon';
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -18,7 +18,7 @@ import { RouterLink } from '@angular/router';
 export class GameCardComponent {
     public game = input.required<AbstractGame>();
 
-    public toReadableDate = (date: Date) => getRelativeTimeString(date);
+    public toReadableDate = (date: Date) => DateHelper.getRelativeTimeString(date);
     public toReadableDigit = (number: number) => new Intl.NumberFormat().format(number);
     public toReadableNumber = (number: number) => new Intl.NumberFormat(undefined, {
         notation: 'compact',

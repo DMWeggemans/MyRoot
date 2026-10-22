@@ -1,6 +1,6 @@
 import { Component, inject, input, model, Renderer2 } from '@angular/core';
-import { GameFilters } from '../../shared/clients/games/games.types';
-import { FilterResponse } from '../../shared/clients/base.types';
+import { GameFilters } from '../../../shared/clients/games/games.types';
+import { FilterResponse } from '../../../shared/clients/base.types';
 
 @Component({
     selector: 'game-pagination',

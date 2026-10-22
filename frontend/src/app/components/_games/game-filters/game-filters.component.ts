@@ -1,11 +1,11 @@
-import { ThumbsUpFillIcon } from '../../icons/thumbs-up-fill/thumbs-up-fill.icon';
-import { searchableSignal } from '../../shared/helpers/signal.helpers';
-import { GameFilters } from '../../shared/clients/games/games.types';
-import { StarFillIcon } from '../../icons/star-fill/star-fill.icon';
-import { AlphabetIcon } from '../../icons/alphabet/alphabet.icon';
+import { ThumbsUpFillIcon } from '../../../icons/thumbs-up-fill/thumbs-up-fill.icon';
+import { searchableSignal } from '../../../shared/helpers/signal.helpers';
+import { GameFilters } from '../../../shared/clients/games/games.types';
+import { StarFillIcon } from '../../../icons/star-fill/star-fill.icon';
+import { AlphabetIcon } from '../../../icons/alphabet/alphabet.icon';
 import { Component, model, signal } from '@angular/core';
-import { ClockIcon } from '../../icons/clock/clock';
-import { EyeIcon } from '../../icons/eye/eye.icon';
+import { ClockIcon } from '../../../icons/clock/clock';
+import { EyeIcon } from '../../../icons/eye/eye.icon';
 
 @Component({
   selector: 'game-filters',

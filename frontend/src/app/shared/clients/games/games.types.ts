@@ -3,7 +3,7 @@ import { FilterResponse } from "../base.types";
 export interface AbstractGame {
     id: string;
     title: string;
-    imageUrl: string;
+    coverImage: string;
     statistics: GameStatistics;
 }
 

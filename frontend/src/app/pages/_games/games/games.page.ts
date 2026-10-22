@@ -1,10 +1,10 @@
-import { GamePaginationComponent } from '../../components/game-pagination/game-pagination.component';
-import { GameFiltersComponent } from '../../components/game-filters/game-filters.component';
-import { GameCardComponent } from '../../components/game-card/game-card.component';
-import { AbstractGame, GameFilters } from '../../shared/clients/games/games.types';
-import { GamesClient } from '../../shared/clients/games/games.client';
+import { GamePaginationComponent } from '../../../components/_games/game-pagination/game-pagination.component';
+import { GameFiltersComponent } from '../../../components/_games/game-filters/game-filters.component';
+import { GameCardComponent } from '../../../components/_games/game-card/game-card.component';
+import { AbstractGame, GameFilters } from '../../../shared/clients/games/games.types';
+import { GamesClient } from '../../../shared/clients/games/games.client';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FilterResponse } from '../../shared/clients/base.types';
+import { FilterResponse } from '../../../shared/clients/base.types';
 
 @Component({
     selector: 'app-games.page',

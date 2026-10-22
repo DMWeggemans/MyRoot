@@ -1,0 +1,22 @@
+<div class="content">
+    <div class="side-content">
+        <header>
+            <a routerLink="/games" class="return-button">
+                <return-icon></return-icon>
+            </a>
+            <p class="updated-on">Uploaded {{ DateHelper.getDateString(gameState.game().statistics.uploadedOn) }}</p>
+        </header>
+        <main>
+            <img class="cover-image" [src]="gameState.game().coverImage" alt="Cover">
+        </main>
+    </div>
+    <div class="main-content">
+        <header>
+            <a class="header-link" [href]="Route.link()" [class.active]="Route.on()" (click)="Route.go($event)">Game Info</a>
+            <a class="header-link" [href]="Route.link('achievements')" [class.active]="Route.on('achievements')" (click)="Route.go($event, 'achievements')">Achievements</a>
+        </header>
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</div>

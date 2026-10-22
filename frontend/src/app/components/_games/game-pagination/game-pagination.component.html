@@ -1,6 +1,6 @@
 <div class="games-pagination">
     <div class="games-pagination-side">
-        <button class="games-pagination-button" (click)="addPage(-1)">&lt;</button>
+        <button class="games-pagination-button" (click)="addPage(-1)" [disabled]="filters().page <= 1">&lt;</button>
         @for (page of pageSizes; track $index) {
             @if (page > 0) {
                 <button class="games-pagination-button" [class.selected]="page === filters().page" (click)="setPage(page)">{{ toReadableNumber(page) }}</button>
@@ -9,7 +9,7 @@
                 <button class="games-pagination-button" (click)="enableInput($event)">...</button>
             }
         }
-        <button class="games-pagination-button" (click)="addPage(1)">></button>
+        <button class="games-pagination-button" (click)="addPage(1)" [disabled]="filters().page >= (filterResponse()?.totalPages ?? 0)">></button>
     </div>
     <div class="games-pagination-side">
         <button class="games-pagination-button" [class.selected]="filters().pageSize === 12" (click)="setPageSize(12)">12</button>
