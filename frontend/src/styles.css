@@ -24,3 +24,11 @@ button {
     font: inherit;
     border: none;
 }
+
+.text-max-lines {
+    -webkit-line-clamp: var(--max-lines, 2);
+    line-clamp: var(--max-lines, 2);
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    overflow: hidden;
+}

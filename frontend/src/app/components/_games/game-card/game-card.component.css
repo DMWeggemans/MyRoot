@@ -28,14 +28,6 @@
     padding: 10px;
 }
 
-.game-title p {
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    display: -webkit-box;
-    overflow: hidden;
-    line-clamp: 2;
-}
-
 .game-details {
     height: calc(1.2rem * 2);
     box-sizing: content-box;

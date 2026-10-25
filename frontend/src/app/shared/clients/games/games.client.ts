@@ -7,15 +7,15 @@ import { Result } from "../base.types";
 export class GamesClient extends BaseClient {
     private readonly setOfGames = [{
         id: "1",
-        title: "This is a game title",
+        title: "Minecraft, this is a super long long super long long super long long super long long super long long super long long title",
         coverImage: "https://image.api.playstation.com/vulcan/ap/rnd/202407/1020/91fe046f742042e3b31e57f7731dbe2226e1fd1e02a36223.jpg"
     }, {
         id: "2",
-        title: "This is a game title",
+        title: "Fortnite",
         coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkLIX6ZMa2mHSRdgWxOwOHJjAQhI_GffsjqXKoyuZb6KbbMvlhlv5usE5E&s=10"
     }, {
         id: "3",
-        title: "This is a game title",
+        title: "Roblox",
         coverImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-fWlmX2KRTZfBUnbkbhm98gKLdLtPxmdAaxI3DupU55XHUyPtSx2Kyj4&s=10",
     }];
 

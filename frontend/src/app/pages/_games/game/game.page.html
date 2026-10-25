@@ -4,10 +4,13 @@
             <a routerLink="/games" class="return-button">
                 <return-icon></return-icon>
             </a>
-            <p class="updated-on">Uploaded {{ DateHelper.getDateString(gameState.game().statistics.uploadedOn) }}</p>
+            <p class="updated-on">Uploaded {{ gameState.game() === null ? '..' : DateHelper.getDateString(gameState.game().statistics.uploadedOn) }}</p>
         </header>
         <main>
-            <img class="cover-image" [src]="gameState.game().coverImage" alt="Cover">
+            <img class="cover-image" [src]="gameState.game() === null ? '' : gameState.game().coverImage" alt="Cover">
+            <div class="game-details">
+                <p class="game-details-title text-max-lines" [title]="gameState.game().title">{{ gameState.game().title }}</p>
+            </div>
         </main>
     </div>
     <div class="main-content">

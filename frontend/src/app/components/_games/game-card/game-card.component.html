@@ -3,7 +3,7 @@
         <img [src]="game().coverImage" alt="Game Banner">
     </section>
     <section class="game-title">
-        <p>{{ game().title }}</p>
+        <p class="text-max-lines" [title]="game().title">{{ game().title }}</p>
     </section>
     <section class="game-details">
         @let uploadedOn = toReadableDate(game().statistics.uploadedOn);

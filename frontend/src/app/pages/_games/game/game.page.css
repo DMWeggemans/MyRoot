@@ -1,14 +1,23 @@
 .content {
+    padding: 10px;
     display: flex;
     width: 100%;
+    gap: 10px;
 }
 
 .side-content {
+    border: 1px solid lightgrey;
     flex-direction: column;
-    gap: 10px;
+    border-radius: 5px;
     padding: 10px;
     display: flex;
     width: 500px;
+    gap: 10px;
+}
+
+.side-content main {
+    border: 1px solid lightgrey;
+    border-radius: 5px;
 }
 
 header {
@@ -17,13 +26,6 @@ header {
     display: flex;
     width: 100%;
     gap: 10px;
-}
-
-.cover-image {
-    border: 1px solid lightgrey;
-    border-radius: 5px;
-    object-fit: cover;
-    height: 300px;
 }
 
 .return-button {
@@ -45,8 +47,30 @@ header {
     padding: 10px;
 }
 
+.cover-image {
+    border-bottom: 1px solid lightgrey;
+    border-radius: 5px 5px 0 0;
+    object-fit: cover;
+    height: 300px;
+}
+
+.game-details {
+    padding: 10px;
+}
+
+.game-details-title {
+    font-size: 20px;
+}
+
 .main-content {
     flex: 1;
+}
+
+.main-content main {
+    border: 1px solid lightgrey;
+    border-radius: 0 0 5px 5px;
+    word-break: break-word;
+    padding: 10px;
 }
 
 .header-link {
