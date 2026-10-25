@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MyRoot.Application.Interfaces.Services.Auth;
+﻿using MyRoot.Application.Interfaces.Services.Auth;
+using Microsoft.Extensions.DependencyInjection;
 using MyRoot.Application.Services.Auth;
 
 namespace MyRoot.Application

@@ -13,24 +13,15 @@ using System.Text;
 
 namespace MyRoot.Application.Services.Auth
 {
-    public class TokenService : ITokenService
+    public class TokenService(IApplicationDBContext _context, IConfiguration _configuration) : ITokenService
     {
-        private readonly IApplicationDBContext Context;
-        private readonly IConfiguration Configuration;
-
-        public TokenService(IApplicationDBContext context, IConfiguration configuration)
-        {
-            Context = context;
-            Configuration = configuration;
-        }
-
         public AuthToken GenerateJWT(User user)
         {
             ClaimsIdentity claims = new ClaimsIdentity([
                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
            ]);
 
-            byte[] secret = Encoding.UTF8.GetBytes(Configuration.GetValueOrThrow("JWT:Secret"));
+            byte[] secret = Encoding.UTF8.GetBytes(_configuration.GetValueOrThrow("JWT:Secret"));
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(secret);
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -38,8 +29,8 @@ namespace MyRoot.Application.Services.Auth
 
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor()
             {
-                Issuer = Configuration.GetValueOrThrow("JWT:Issuer"),
-                Audience = Configuration.GetValueOrThrow("JWT:Audience"),
+                Issuer = _configuration.GetValueOrThrow("JWT:Issuer"),
+                Audience = _configuration.GetValueOrThrow("JWT:Audience"),
                 SigningCredentials = credentials,
                 Expires = expiresOn,
                 Subject = claims
@@ -54,22 +45,24 @@ namespace MyRoot.Application.Services.Auth
             DateTime expiresOn = GetExpiresOn("RefreshToken:ExpiryMinutes");
             string token = GenerateToken();
 
-            Context.RefreshTokens.Add(new RefreshToken()
+            _context.RefreshTokens.Add(new RefreshToken()
             {
-                LoggedInOn = DateTime.UtcNow,
                 TokenHash = Hash(token),
+
+                CreatedOn = DateTime.UtcNow,
                 ExpiresOn = expiresOn,
+
                 UserId = user.Id
             });
 
-            await Context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return new AuthToken(token, expiresOn);
         }
 
         public async Task<(AuthToken?, User?)> RefreshTokenAsync(string token)
         {
-            RefreshToken? refreshToken = await Context.RefreshTokens
+            RefreshToken? refreshToken = await _context.RefreshTokens
                 .Include(rt => rt.User)
                 .SingleOrDefaultAsync(rt => rt.TokenHash == Hash(token));
 
@@ -77,8 +70,8 @@ namespace MyRoot.Application.Services.Auth
             {
                 if (refreshToken is not null)
                 {
-                    Context.RefreshTokens.Remove(refreshToken);
-                    await Context.SaveChangesAsync();
+                    _context.RefreshTokens.Remove(refreshToken);
+                    await _context.SaveChangesAsync();
                 }
 
                 return (null, null);
@@ -89,19 +82,19 @@ namespace MyRoot.Application.Services.Auth
             
             refreshToken.TokenHash = Hash(token);
             refreshToken.ExpiresOn = expiresOn;
-            await Context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return (new AuthToken(token, expiresOn), refreshToken.User);
         }
 
         public async Task DeleteRefreshTokenAsync(string token)
-            => await Context.RefreshTokens.Where(rt => rt.TokenHash == Hash(token))
+            => await _context.RefreshTokens.Where(rt => rt.TokenHash == Hash(token))
                 .ExecuteDeleteAsync();
 
         private DateTime GetExpiresOn(string key)
         {
-            if (!int.TryParse(Configuration.GetValueOrThrow(key), out int expiryMinutes))
-                Configuration.Throw(key);
+            if (!int.TryParse(_configuration.GetValueOrThrow(key), out int expiryMinutes))
+                _configuration.Throw(key);
             return DateTime.UtcNow.AddMinutes(expiryMinutes);
         }
 

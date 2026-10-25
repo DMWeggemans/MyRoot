@@ -6,6 +6,7 @@
 .vscode/
 .angular/
 node_modules/
+documents/
 
 #
 # BACKEND #

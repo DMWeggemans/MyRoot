@@ -4,8 +4,11 @@ namespace MyRoot.Application.Extensions.Auth
 {
     public static class EmailExtensions
     {
-        public static bool IsValid(string email)
+        public static bool IsValid(string? email)
         {
+            if (email is null)
+                return true;
+
             if (!MailAddress.TryCreate(email, out MailAddress? address))
                 return false;
 

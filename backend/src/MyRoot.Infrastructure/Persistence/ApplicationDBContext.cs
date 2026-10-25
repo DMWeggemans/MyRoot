@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyRoot.Domain.Entities;
 using MyRoot.Domain.Interfaces;
+using MyRoot.Domain.Entities;
 
 namespace MyRoot.Infrastructure.Persistence
 {

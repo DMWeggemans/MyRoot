@@ -1,6 +1,7 @@
 using MyRoot.Infrastructure.Persistence;
 using MyRoot.Application.Extensions;
 using Microsoft.EntityFrameworkCore;
+using MyRoot.Domain.Configurations;
 using MyRoot.Infrastructure;
 using MyRoot.Application;
 
@@ -11,6 +12,9 @@ namespace MyRoot.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            ApplicationConfiguration.Urls.Application = builder.Configuration.GetValueOrThrow("Urls:Application");
+            ApplicationConfiguration.Urls.API = builder.Configuration.GetValueOrThrow("Urls:API");
 
             // Add services to the container.
             builder.Services.RegisterAPI(builder.Configuration, builder.Environment);
@@ -38,6 +42,7 @@ namespace MyRoot.API
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("specifications.json", "API");
+                    options.DefaultModelsExpandDepth(-1);
                     options.RoutePrefix = "api";
                 });
 
@@ -47,15 +52,18 @@ namespace MyRoot.API
                     return Task.CompletedTask;
                 });
             }
+            else
+            {
+                app.UseExceptionHandler("/error");
+                app.UseHttpsRedirection();
+            }
 
-            app.UseHttpsRedirection();
             app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
-            app.UseExceptionHandler("/error");
 
             app.Run();
         }

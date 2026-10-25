@@ -21,10 +21,6 @@ export class AuthClient extends BaseClient {
     }
 
     public async authorize() {
-        const result = await this.get<AuthorizedValues>('/auth/authorize');
-        if (result.succeeded && result.value)
-            result.value.expiresOn = new Date(result.value.expiresOn);
-
-        return result;
+        return await this.get<AuthorizedValues>('/auth/authorize');
     }
 }
