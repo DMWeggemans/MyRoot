@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyRoot.Domain.Interfaces.Services;
+﻿using MyRoot.Domain.Interfaces.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
 namespace MyRoot.Infrastructure.Services
 {
-    public class PasswordService : IPasswordService
+    public class PasswordService(ILogger<PasswordService> _logger) : IPasswordService
     {
         private readonly PasswordHasher<object> PasswordHasher = new PasswordHasher<object>();
         private readonly object User = new object();
@@ -14,7 +15,13 @@ namespace MyRoot.Infrastructure.Services
         public bool VerifyPassword(string hash, string password)
         {
             PasswordVerificationResult result = PasswordHasher.VerifyHashedPassword(User, hash, password);
-            return result == PasswordVerificationResult.Success || result == PasswordVerificationResult.SuccessRehashNeeded;
+            if (result == PasswordVerificationResult.SuccessRehashNeeded)
+            {
+                _logger.LogWarning("A password that needs to be rehashed has been found!");
+                return true;
+            }
+
+            return result == PasswordVerificationResult.Success;
         }
     }
 }

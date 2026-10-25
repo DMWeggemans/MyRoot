@@ -1,8 +1,10 @@
-﻿using MyRoot.Application.Interfaces.Services.Auth;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MyRoot.Application.Interfaces.Services.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 using MyRoot.Application.Requests.Auth;
-using MyRoot.Application.Extensions;
 using MyRoot.Application.DTOs.Auth;
+using MyRoot.Domain.Configurations;
 using Microsoft.AspNetCore.Mvc;
 using MyRoot.Application.DTOs;
 using System.Security.Claims;
@@ -11,28 +13,20 @@ namespace MyRoot.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController(IWebHostEnvironment _environment, IAuthService _authService) : ControllerBase
     {
-        private readonly CookieOptions CookieOptions;
-        private readonly IAuthService AuthService;
-
-        public AuthController(IWebHostEnvironment environment, IConfiguration configuration, IAuthService authService)
+        private readonly CookieOptions CookieOptions = new CookieOptions()
         {
-            AuthService = authService;
-
-            CookieOptions = new CookieOptions()
-            {
-                Domain = environment.IsProduction() ? configuration.GetValueOrThrow("UI:Url").Split('/').Last() : null,
-                Secure = environment.IsProduction(),
-                SameSite = SameSiteMode.Lax,
-                HttpOnly = true
-            };
-        }
+            Domain = _environment.IsProduction() ? ApplicationConfiguration.Urls.Application : null,
+            Secure = _environment.IsProduction(),
+            SameSite = SameSiteMode.Lax,
+            HttpOnly = true
+        };
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginUserRequest request)
         {
-            Result<AuthTokens> result = await AuthService.LoginAsync(request);
+            Result<AuthTokens> result = await _authService.LoginAsync(request);
             if (!result.Succeeded)
             {
                 if (new List<string?>() { "INCORRECT_CREDENTIALS" }.Contains(result.Message))
@@ -41,71 +35,45 @@ namespace MyRoot.API.Controllers
                 return BadRequest(result);
             }
 
-            if (result.Value != null)
-            {
-                CookieOptions.Expires = result.Value.JWT.ExpiresOn;
-                Response.Cookies.Append("X-Access-Token", result.Value.JWT.Value, CookieOptions);
-
-                CookieOptions.Expires = result.Value.RefreshToken.ExpiresOn;
-                Response.Cookies.Append("X-Refresh-Token", result.Value.RefreshToken.Value, CookieOptions);
-            }
-
+            HandleAuthTokens(result);
             result.Value = null;
+
             return Ok(result);
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterUserRequest request)
         {
-            Result<AuthTokens> result = await AuthService.RegisterAsync(request);
+            Result<AuthTokens> result = await _authService.RegisterAsync(request);
             if (!result.Succeeded)
                 return BadRequest(result);
 
-            if (result.Value != null)
-            {
-                CookieOptions.Expires = result.Value.JWT.ExpiresOn;
-                Response.Cookies.Append("X-Access-Token", result.Value.JWT.Value, CookieOptions);
-
-                CookieOptions.Expires = result.Value.RefreshToken.ExpiresOn;
-                Response.Cookies.Append("X-Refresh-Token", result.Value.RefreshToken.Value, CookieOptions);
-            }
-
+            HandleAuthTokens(result);
             result.Value = null;
+
             return Ok(result);
         }
 
         [HttpPost("Refresh")]
         public async Task<IActionResult> Refresh()
         {
-            string? token = Request.Cookies["X-Refresh-Token"];
+            string? token = Request.Cookies[ApplicationConfiguration.Auth.Tokens.RefreshToken];
             if (string.IsNullOrEmpty(token))
             {
-                Response.Cookies.Delete("X-Access-Token", CookieOptions);
-                return Unauthorized(Result.Failed("NOT_AUTHORIZED"));
+                Response.Cookies.Delete(ApplicationConfiguration.Auth.Tokens.AccessToken, CookieOptions);
+                return Challenge(JwtBearerDefaults.AuthenticationScheme);
             }
 
-            Result<AuthTokens> result = await AuthService.RefreshAsync(token);
+            Result<AuthTokens> result = await _authService.RefreshAsync(token);
             if (!result.Succeeded)
             {
-                if (new List<string?>() { "NOT_AUTHORIZED" }.Contains(result.Message))
-                {
-                    Response.Cookies.Delete("X-Access-Token", CookieOptions);
-                    return Unauthorized(result);
-                }
-
-                return BadRequest(result);
+                Response.Cookies.Delete(ApplicationConfiguration.Auth.Tokens.AccessToken, CookieOptions);
+                return Challenge(JwtBearerDefaults.AuthenticationScheme);
             }
 
-            if (result.Value != null)
-            {
-                CookieOptions.Expires = result.Value.JWT.ExpiresOn;
-                Response.Cookies.Append("X-Access-Token", result.Value.JWT.Value, CookieOptions);
-
-                CookieOptions.Expires = result.Value.RefreshToken.ExpiresOn;
-                Response.Cookies.Append("X-Refresh-Token", result.Value.RefreshToken.Value, CookieOptions);
-            }
-
+            HandleAuthTokens(result);
             result.Value = null;
+
             return Ok(result);
         }
 
@@ -113,15 +81,17 @@ namespace MyRoot.API.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            string? token = Request.Cookies["X-Refresh-Token"];
+            string? token = Request.Cookies[ApplicationConfiguration.Auth.Tokens.RefreshToken];
 
-            Response.Cookies.Delete("X-Access-Token", CookieOptions);
-            Response.Cookies.Delete("X-Refresh-Token", CookieOptions);
+            Response.Cookies.Delete(ApplicationConfiguration.Auth.Tokens.AccessToken, CookieOptions);
+            Response.Cookies.Delete(ApplicationConfiguration.Auth.Tokens.RefreshToken, CookieOptions);
 
             if (token is not null)
-                await AuthService.LogoutAsync(token);
+            {
+                await _authService.LogoutAsync(token);
+            }
 
-            return Ok(Result.Success("SUCCESS_LOGOUT"));
+            return Ok(Result.Success());
         }
 
         [HttpGet("Authorize")]
@@ -131,14 +101,27 @@ namespace MyRoot.API.Controllers
             AuthorizedValues values = new AuthorizedValues();
 
             if (!Guid.TryParse(Request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid id))
-                return Unauthorized(Result.Failed("NOT_AUTHORIZED"));
+                return Challenge(JwtBearerDefaults.AuthenticationScheme);
             values.Id = id;
 
             if (!long.TryParse(Request.HttpContext.User.FindFirstValue("exp"), out long expiresOn))
-                return Unauthorized(Result.Failed("NOT_AUTHORIZED"));
+                return Challenge(JwtBearerDefaults.AuthenticationScheme);
             values.ExpiresOn = DateTimeOffset.FromUnixTimeSeconds(expiresOn).UtcDateTime;
 
             return Ok(Result.Success(values));
+        }
+
+        [SwaggerIgnore]
+        private void HandleAuthTokens(Result<AuthTokens> result)
+        {
+            if (result.Value is null)
+                return;
+            
+            CookieOptions.Expires = result.Value.JWT.ExpiresOn;
+            Response.Cookies.Append(ApplicationConfiguration.Auth.Tokens.AccessToken, result.Value.JWT.Value, CookieOptions);
+
+            CookieOptions.Expires = result.Value.RefreshToken.ExpiresOn;
+            Response.Cookies.Append(ApplicationConfiguration.Auth.Tokens.RefreshToken, result.Value.RefreshToken.Value, CookieOptions);
         }
     }
 }

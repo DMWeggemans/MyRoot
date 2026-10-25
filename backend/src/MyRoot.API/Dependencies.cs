@@ -2,22 +2,18 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
 using MyRoot.Application.Extensions;
+using MyRoot.Domain.Configurations;
 using Microsoft.AspNetCore.Mvc;
 using MyRoot.Application.DTOs;
 using Microsoft.OpenApi;
-using System.Text.Json;
 using System.Text;
 
 namespace MyRoot.API
 {
     public static class Dependencies
     {
-        private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
-
-        private static readonly string UnauthorizedPayload = JsonSerializer.Serialize(Result.Failed("NOT_AUTHORIZED"), JsonOptions);
+        private static readonly Result ForbiddenPayload = Result.Failed("FORBIDDEN");
+        private static readonly Result UnauthorizedPayload = Result.Failed("NOT_AUTHORIZED");
 
         public static IServiceCollection RegisterAPI(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -25,7 +21,7 @@ namespace MyRoot.API
             services.RegisterConfigurations();
             services.RegisterAuthentication(configuration);
             services.RegisterAuthorization();
-            services.RegisterCors(configuration, environment);
+            services.RegisterCors(environment);
 
             return services;
         }
@@ -36,7 +32,7 @@ namespace MyRoot.API
             {
                 options.SwaggerDoc("api", new OpenApiInfo()
                 {
-                    Title = "API",
+                    Title = "MyRoot API",
                     Version = null
                 });
             });
@@ -87,11 +83,19 @@ namespace MyRoot.API
                 {
                     OnMessageReceived = (context) =>
                     {
-                        string? token = context.Request.Cookies["X-Access-Token"];
+                        string? token = context.Request.Cookies[ApplicationConfiguration.Auth.Tokens.AccessToken];
                         if (!string.IsNullOrEmpty(token))
                             context.Token = token;
 
                         return Task.CompletedTask;
+                    },
+
+                    OnForbidden = async (context) =>
+                    {
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        context.Response.ContentType = "application/json";
+
+                        await context.Response.WriteAsJsonAsync(ForbiddenPayload);
                     },
 
                     OnChallenge = async (context) =>
@@ -101,7 +105,7 @@ namespace MyRoot.API
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
 
-                        await context.Response.WriteAsync(UnauthorizedPayload);
+                        await context.Response.WriteAsJsonAsync(UnauthorizedPayload);
                     }
                 };
             });
@@ -116,13 +120,13 @@ namespace MyRoot.API
             return services;
         }
 
-        private static IServiceCollection RegisterCors(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
+        private static IServiceCollection RegisterCors(this IServiceCollection services, IWebHostEnvironment environment)
         {
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    List<string> origins = [configuration.GetValueOrThrow("UI:Url")];
+                    List<string> origins = [ApplicationConfiguration.Urls.Application];
                     if (environment.IsDevelopment())
                         origins.Add("http://localhost:4200");
 

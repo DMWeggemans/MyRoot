@@ -1,4 +1,4 @@
-import { ValidationMessageComponent } from '../../components/validation-message.component/validation-message.component';
+import { ValidationMessageComponent } from '../../components/validation-message/validation-message.component';
 import { RegisterUserRequest } from '../../shared/clients/auth/auth.types';
 import { FieldTree, FormField, FormRoot } from '@angular/forms/signals';
 import { createError } from '../../shared/helpers/validation.helpers';
@@ -34,20 +34,20 @@ export class RegisterPage {
                     message = this.request.value().password.length < 4
                         ? 'The username cannot be below 4 characters'
                         : 'The username cannot exceed 32 characters';
-                    return [createError(fieldtree.userName, message)];
+                    return createError(fieldtree.userName, message);
                 case 'USERNAME_EXISTS':
-                    return [createError(fieldtree.userName, 'The username is already in use')];
+                    return createError(fieldtree.userName, 'The username is already in use');
                 case 'INVALID_EMAIL':
-                    return [createError(fieldtree.email, 'The email must be valid')];
+                    return createError(fieldtree.email, 'The email must be valid');
                 case 'EMAIL_EXISTS':
-                    return [createError(fieldtree.email, 'The e-mail is already in use')];
+                    return createError(fieldtree.email, 'The e-mail is already in use');
                 case 'INVALID_PASSWORD':
                     message = this.request.value().password.length < 8
                         ? 'The password cannot be below 8 characters'
                         : 'The password cannot exceed 128 characters';
-                    return [createError(fieldtree.password, message)];
+                    return createError(fieldtree.password, message);
                 default:
-                    return [createError(fieldtree.password)];
+                    return createError(fieldtree.password);
             }
         }
 

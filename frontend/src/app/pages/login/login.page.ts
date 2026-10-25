@@ -1,4 +1,4 @@
-import { ValidationMessageComponent } from '../../components/validation-message.component/validation-message.component';
+import { ValidationMessageComponent } from '../../components/validation-message/validation-message.component';
 import { LoginUserRequest } from '../../shared/clients/auth/auth.types';
 import { FieldTree, FormField, FormRoot } from '@angular/forms/signals';
 import { createError } from '../../shared/helpers/validation.helpers';
@@ -29,9 +29,9 @@ export class LoginPage {
         if (!result.succeeded) {
             switch (result.message) {
                 case 'INCORRECT_CREDENTIALS':
-                    return [createError(fieldtree.password, 'The e-mail or password is incorrect')];
+                    return createError(fieldtree.password, 'The e-mail or password is incorrect');
                 default:
-                    return [createError(fieldtree.password)];
+                    return createError(fieldtree.password);
             }
         }
 

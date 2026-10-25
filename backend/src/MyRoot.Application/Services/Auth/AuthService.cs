@@ -1,40 +1,37 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MyRoot.Application.DTOs;
-using MyRoot.Application.DTOs.Auth;
+﻿using MyRoot.Application.Interfaces.Services.Auth;
 using MyRoot.Application.Extensions.Auth;
-using MyRoot.Application.Interfaces.Services.Auth;
-using MyRoot.Application.Requests.Auth;
-using MyRoot.Domain.Entities;
-using MyRoot.Domain.Interfaces;
 using MyRoot.Domain.Interfaces.Services;
+using MyRoot.Application.Requests.Auth;
+using Microsoft.EntityFrameworkCore;
+using MyRoot.Application.DTOs.Auth;
+using MyRoot.Domain.Interfaces;
+using MyRoot.Application.DTOs;
+using MyRoot.Domain.Entities;
 
 namespace MyRoot.Application.Services.Auth
 {
-    public class AuthService : IAuthService
+    public class AuthService(IPasswordService _passwordService, IApplicationDBContext _context, ITokenService _tokenService) : IAuthService
     {
-        private readonly IPasswordService PasswordService;
-        private readonly IApplicationDBContext Context;
-        private readonly ITokenService TokenService;
-
-        public AuthService(IPasswordService passwordService, IApplicationDBContext context, ITokenService tokenService)
-        {
-            PasswordService = passwordService;
-            TokenService = tokenService;
-            Context = context;
-        }
-
         public async Task<Result<AuthTokens>> LoginAsync(LoginUserRequest request)
         {
-            User? user = EmailExtensions.IsValid(request.User)
-                ? await Context.Users.SingleOrDefaultAsync(u => u.Email.ToLowerInvariant() == request.User.ToLowerInvariant())
-                : await Context.Users.SingleOrDefaultAsync(u => u.UserName.ToLowerInvariant() == request.User.ToLowerInvariant());
+            bool isValidEmail = EmailExtensions.IsValid(request.User);
+            User? user = isValidEmail
+                ? await _context.Users.SingleOrDefaultAsync(u => u.NormalizedEmail == request.User.ToUpperInvariant())
+                : await _context.Users.SingleOrDefaultAsync(u => u.NormalizedUserName == request.User.ToUpperInvariant());
 
-            if (user is null || !PasswordService.VerifyPassword(user.PasswordHash, request.Password))
-                return Result<AuthTokens>.Failed("INCORRECT_CREDENTIALS");
+            if (user is null || !_passwordService.VerifyPassword(user.PasswordHash, request.Password))
+            {
+                if (!isValidEmail)
+                    return Result<AuthTokens>.Failed("INCORRECT_CREDENTIALS");
+
+                user = await _context.Users.SingleOrDefaultAsync(u => u.NormalizedUserName == request.User.ToUpperInvariant());
+                if (user is null || !_passwordService.VerifyPassword(user.PasswordHash, request.Password))
+                    return Result<AuthTokens>.Failed("INCORRECT_CREDENTIALS");
+            }
 
             return Result<AuthTokens>.Success(new AuthTokens(
-                TokenService.GenerateJWT(user),
-                await TokenService.GenerateRefreshTokenAsync(user)
+                _tokenService.GenerateJWT(user),
+                await _tokenService.GenerateRefreshTokenAsync(user)
             ));
         }
 
@@ -46,45 +43,49 @@ namespace MyRoot.Application.Services.Auth
             if (request.Password.Length < 8 || request.Password.Length > 128)
                 return Result<AuthTokens>.Failed("INVALID_PASSWORD");
 
-            if (await Context.Users.AnyAsync(u => u.UserName.ToLowerInvariant() == request.UserName.ToLowerInvariant()))
+            if (await _context.Users.AnyAsync(u => u.NormalizedUserName == request.UserName.ToUpperInvariant()))
                 return Result<AuthTokens>.Failed("USERNAME_EXISTS");
 
             if (!EmailExtensions.IsValid(request.Email))
                 return Result<AuthTokens>.Failed("INVALID_EMAIL");
 
-            if (await Context.Users.AnyAsync(u => u.Email.ToLowerInvariant() == request.Email.ToLowerInvariant()))
+            if (request.Email is not null && await _context.Users.AnyAsync(u => u.NormalizedEmail == request.Email.ToUpperInvariant()))
                 return Result<AuthTokens>.Failed("EMAIL_EXISTS");
 
             User user = new User()
             {
-                PasswordHash = PasswordService.HashPassword(request.Password),
-                CreatedOn = DateTime.UtcNow,
                 UserName = request.UserName,
-                Email = request.Email
+                NormalizedUserName = request.UserName.ToUpperInvariant(),
+
+                Email = request.Email,
+                NormalizedEmail = request.Email?.ToUpperInvariant(),
+
+                PasswordHash = _passwordService.HashPassword(request.Password),
+                CreatedOn = DateTime.UtcNow,
             };
 
-            Context.Users.Add(user);
-            await Context.SaveChangesAsync();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return Result<AuthTokens>.Success(new AuthTokens(
-                TokenService.GenerateJWT(user),
-                await TokenService.GenerateRefreshTokenAsync(user)
+                _tokenService.GenerateJWT(user),
+                await _tokenService.GenerateRefreshTokenAsync(user)
             ));
         }
 
         public async Task<Result<AuthTokens>> RefreshAsync(string token)
         {
-            (AuthToken? refreshToken, User? user) = await TokenService.RefreshTokenAsync(token);
+            (AuthToken? refreshToken, User? user) = await _tokenService.RefreshTokenAsync(token);
             if (refreshToken is null || user is null)
-                return Result<AuthTokens>.Failed("NOT_AUTHORIZED");
+                return Result<AuthTokens>.Failed();
 
             return Result<AuthTokens>.Success(new AuthTokens(
-                TokenService.GenerateJWT(user),
+                _tokenService.GenerateJWT(user),
                 refreshToken
             ));
         }
 
         public async Task LogoutAsync(string token)
-            => await TokenService.DeleteRefreshTokenAsync(token);
+            => await _tokenService.DeleteRefreshTokenAsync(token);
     }
 }

@@ -6,7 +6,7 @@ import { inject, Injectable, signal } from "@angular/core";
 export class AuthService {
     private readonly authClient = inject(AuthClient);
     public values = signal<AuthorizedValues | null>(null);
-    public setAuthorized = signal<boolean | null>(null);
+    public authorized = signal<boolean | null>(null);
 
     public async login(request: LoginUserRequest) {
         const result = await this.authClient.login(request);
@@ -37,12 +37,12 @@ export class AuthService {
             return result;
         }
 
-        await this.authorize();
         return result;
     }
 
     public async logout() {
         await this.authClient.logout();
+        this.authorized.set(null);
         this.values.set(null);
     }
 
@@ -50,13 +50,13 @@ export class AuthService {
         const result = await this.authClient.authorize();
         switch (result.message) {
             case null:
-                this.setAuthorized.set(true);
+                this.authorized.set(true);
                 break;
             case 'NOT_AUTHORIZED':
-                this.setAuthorized.set(false);
+                this.authorized.set(false);
                 break;
             default:
-                this.setAuthorized.set(null);
+                this.authorized.set(null);
                 break;
         }
 
@@ -70,7 +70,10 @@ export class AuthService {
 
     public isAuthorized() {
         const isAuthorized = (this.values()?.expiresOn.getTime() ?? 0) > Date.now();
-        if (!isAuthorized) this.values.set(null);
+        if (!isAuthorized) {
+            this.authorized.set(null);
+            this.values.set(null);
+        }
 
         return isAuthorized;
     }

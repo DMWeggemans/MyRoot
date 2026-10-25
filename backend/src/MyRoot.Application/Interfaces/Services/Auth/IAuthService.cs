@@ -1,6 +1,6 @@
-﻿using MyRoot.Application.DTOs;
+﻿using MyRoot.Application.Requests.Auth;
 using MyRoot.Application.DTOs.Auth;
-using MyRoot.Application.Requests.Auth;
+using MyRoot.Application.DTOs;
 
 namespace MyRoot.Application.Interfaces.Services.Auth
 {

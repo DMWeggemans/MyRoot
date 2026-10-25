@@ -4,11 +4,15 @@
     {
         public Guid Id { get; set; }
         public string UserName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public string NormalizedUserName { get; set; } = string.Empty;
+
+        public string? Email { get; set; }
+        public string? NormalizedEmail { get; set; }
+
         public string PasswordHash { get; set; } = string.Empty;
 
-        public DateTime CreatedOn { get; set; }
-        public DateTime? UpdatedOn { get; set; }
+        public DateTimeOffset CreatedOn { get; set; }
+        public DateTimeOffset? UpdatedOn { get; set; }
 
         // Navigation Properties
         public List<RefreshToken> RefreshTokens { get; set; } = [];

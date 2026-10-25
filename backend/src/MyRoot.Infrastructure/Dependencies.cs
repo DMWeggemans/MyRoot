@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using MyRoot.Domain.Interfaces;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MyRoot.Domain.Interfaces.Services;
 using MyRoot.Infrastructure.Persistence;
 using MyRoot.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using MyRoot.Domain.Interfaces;
 
 namespace MyRoot.Infrastructure
 {
@@ -21,7 +21,7 @@ namespace MyRoot.Infrastructure
         {
             services.AddDbContext<ApplicationDBContext>(context =>
             {
-                context.UseSqlServer(connectionString, options =>
+                context.UseNpgsql(connectionString, options =>
                 {
                     options.MigrationsHistoryTable("Migrations");
                 });
