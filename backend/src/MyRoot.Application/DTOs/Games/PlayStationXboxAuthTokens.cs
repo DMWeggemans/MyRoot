@@ -1,6 +1,6 @@
-﻿namespace MyRoot.Application.DTOs.Games.PlayStation
+﻿namespace MyRoot.Application.DTOs.Games
 {
-    public record struct PlayStationAuthTokens(
+    public record struct PlayStationXboxAuthTokens(
         string AccessToken,
         DateTimeOffset AccessTokenExpiresOn,
         string RefreshToken,

@@ -34,7 +34,6 @@ namespace MyRoot.Application.Extensions.Common
                 return this;
 
             Url += !Url.Contains('?') ? '?' : '&';
-
             UrlEncoder encoder = UrlEncoder.Create();
             Url += $"{encoder.Encode(key)}={encoder.Encode(value)}";
 

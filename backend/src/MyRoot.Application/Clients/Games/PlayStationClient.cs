@@ -3,6 +3,7 @@ using MyRoot.Application.Extensions.Games.PlayStation;
 using MyRoot.Application.Responses.Games.PlayStation;
 using MyRoot.Application.Interfaces.Clients.Games;
 using MyRoot.Application.Extensions.Common;
+using MyRoot.Application.DTOs.Games;
 using System.Text.Encodings.Web;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -38,7 +39,7 @@ namespace MyRoot.Application.Clients.Games
             }
         }
 
-        public async Task<PlayStationAuthTokens?> GetTokensByCodeAsync(string code)
+        public async Task<PlayStationAuthTokensResponse?> GetTokensByCodeAsync(string code)
         {
             try
             {
@@ -55,8 +56,7 @@ namespace MyRoot.Application.Clients.Games
                 if (!response.IsSuccessStatusCode)
                     return null;
 
-                PlayStationGetTokensByCodeResponse body = await response.Content.ReadFromJsonAsync<PlayStationGetTokensByCodeResponse>();
-                return body.ToPlayStationAuthTokens();
+                return await response.Content.ReadFromJsonAsync<PlayStationAuthTokensResponse>();
             }
             catch (Exception)
             {
@@ -64,7 +64,7 @@ namespace MyRoot.Application.Clients.Games
             }
         }
 
-        public async Task<PlayStationAuthTokens?> RefreshTokensAsync(string refreshToken)
+        public async Task<PlayStationAuthTokensResponse?> RefreshTokensAsync(string refreshToken)
         {
             try
             {
@@ -81,8 +81,7 @@ namespace MyRoot.Application.Clients.Games
                 if (!response.IsSuccessStatusCode)
                     return null;
 
-                PlayStationGetTokensByCodeResponse body = await response.Content.ReadFromJsonAsync<PlayStationGetTokensByCodeResponse>();
-                return body.ToPlayStationAuthTokens();
+                return await response.Content.ReadFromJsonAsync<PlayStationAuthTokensResponse>();
             }
             catch (Exception)
             {
@@ -90,7 +89,7 @@ namespace MyRoot.Application.Clients.Games
             }
         }
 
-        public async Task<PlayStationUserIds?> GetAccountIdByUserNameAsync(string accessToken, string userName)
+        public async Task<PlayStationGetUserIdByUserNameResponse?> GetAccountIdByUserNameAsync(string accessToken, string userName)
         {
             UrlEncoder encoder = UrlEncoder.Create();
 
@@ -105,8 +104,7 @@ namespace MyRoot.Application.Clients.Games
                 if (!response.IsSuccessStatusCode)
                     return null;
 
-                PlayStationGetUserIdByUserNameResponse body = await response.Content.ReadFromJsonAsync<PlayStationGetUserIdByUserNameResponse>();
-                return body.ToPlayStationUserIds();
+                return await response.Content.ReadFromJsonAsync<PlayStationGetUserIdByUserNameResponse>();
             }
             catch (Exception)
             {
@@ -114,7 +112,7 @@ namespace MyRoot.Application.Clients.Games
             }
         }
 
-        public async Task<PlayStationProfile?> GetProfileByAccountIdAsync(string accessToken, string accountId)
+        public async Task<PlayStationGetProfileByAccountIdResponse?> GetProfileByAccountIdAsync(string accessToken, string accountId)
         {
             UrlEncoder encoder = UrlEncoder.Create();
 
@@ -127,8 +125,7 @@ namespace MyRoot.Application.Clients.Games
                 if (!response.IsSuccessStatusCode)
                     return null;
 
-                PlayStationGetProfileByAccountIdResponse body = await response.Content.ReadFromJsonAsync<PlayStationGetProfileByAccountIdResponse>();
-                return body.ToPlayStationProfile();
+                return await response.Content.ReadFromJsonAsync<PlayStationGetProfileByAccountIdResponse>();
             }
             catch (Exception)
             {

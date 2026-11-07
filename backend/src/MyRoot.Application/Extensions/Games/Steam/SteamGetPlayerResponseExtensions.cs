@@ -5,10 +5,12 @@ namespace MyRoot.Application.Extensions.Games.Steam
 {
     public static class SteamGetPlayerResponseExtensions
     {
-        public static SteamPlayerSummary ToSteamPlayerSummary(this SteamGetPlayerResponse response)
+        public static SteamPlayerSummary? ToSteamPlayerSummary(this SteamGetPlayerResponse? response)
         {
-            SteamGetPlayerResponse.SteamPlayerSummary player = response.Response.Players[0];
+            if (response is null)
+                return null;
 
+            SteamGetPlayerResponse.SteamPlayerSummary player = response.Value.Response.Players[0];
             return new SteamPlayerSummary()
             {
                 SteamId = player.SteamId,

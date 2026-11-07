@@ -15,7 +15,7 @@ namespace MyRoot.Application.Responses.Games.Steam
         public LinkSteamResponse(string steamId, SteamPlayerSummary? player, List<SteamGameSummary> games)
         {
             SteamId = steamId;
-            IsPublic = player is not null ? player.Value.IsPublic && games.Count != 0 : games.Any();
+            IsPublic = (player is null || player.Value.IsPublic) && games.Count != 0;
             UserName = player?.UserName ?? string.Empty;
             ProfileUrl = player?.ProfileUrl ?? string.Empty;
             Avatar = player?.Avatar ?? string.Empty;

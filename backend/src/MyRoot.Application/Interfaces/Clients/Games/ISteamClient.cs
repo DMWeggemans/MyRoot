@@ -1,10 +1,10 @@
-﻿using MyRoot.Application.DTOs.Games.Steam;
+﻿using MyRoot.Application.Responses.Games.Steam;
 
 namespace MyRoot.Application.Interfaces.Clients.Games
 {
     public interface ISteamClient
     {
-        Task<SteamPlayerSummary?> GetPlayerAsync(string steamId);
-        Task<List<SteamGameSummary>> GetPlayerGamesAsync(string steamId);
+        Task<SteamGetPlayerResponse?> GetPlayerAsync(string steamId);
+        Task<SteamGetPlayerGamesResponse?> GetPlayerGamesAsync(string steamId);
     }
 }

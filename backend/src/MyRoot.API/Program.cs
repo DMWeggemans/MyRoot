@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MyRoot.Domain.Configurations;
 using MyRoot.Infrastructure;
 using MyRoot.Application;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace MyRoot.API
 {
@@ -48,6 +49,7 @@ namespace MyRoot.API
                 app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint("specifications.json", "API");
+                    options.DocExpansion(DocExpansion.None);
                     options.DefaultModelsExpandDepth(-1);
                     options.RoutePrefix = "api";
                 });

@@ -1,5 +1,6 @@
-﻿using MyRoot.Application.Interfaces.Clients.Games;
-using MyRoot.Application.Interfaces.Services.Games;
+﻿using MyRoot.Application.Interfaces.Services.Games;
+using MyRoot.Application.Interfaces.Clients.Games;
+using MyRoot.Application.Extensions.Games.Steam;
 using MyRoot.Application.Responses.Games.Steam;
 using MyRoot.Application.Requests.Games.Steam;
 using MyRoot.Application.DTOs.Games.Steam;
@@ -38,8 +39,11 @@ namespace MyRoot.Application.Services.Games
                 return Result<string>.Failed("<h2>Steam OpenID signature verification failed.</h2>");
             }
 
-            SteamPlayerSummary? player = await _steamClient.GetPlayerAsync(parameters.GetSteamId());
-            List<SteamGameSummary> games = await _steamClient.GetPlayerGamesAsync(parameters.GetSteamId());
+            SteamGetPlayerResponse? playerResponse = await _steamClient.GetPlayerAsync(parameters.GetSteamId());
+            SteamPlayerSummary? player = playerResponse.ToSteamPlayerSummary();
+
+            SteamGetPlayerGamesResponse? gamesResponse = await _steamClient.GetPlayerGamesAsync(parameters.GetSteamId());
+            List<SteamGameSummary> games = gamesResponse.ToSteamGameSummaries();
 
             string payload = JsonSerializer.Serialize(Result<LinkSteamResponse>.Success(new LinkSteamResponse(parameters.GetSteamId(), player, games)), JsonOptions);
             return Result<string>.Success($@"

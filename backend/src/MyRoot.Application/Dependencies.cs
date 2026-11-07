@@ -32,6 +32,7 @@ namespace MyRoot.Application
         {
             services.AddScoped<ISteamClient, SteamClient>();
             services.AddScoped<IPlayStationClient, PlayStationClient>();
+            services.AddScoped<IXboxClient, XboxClient>();
 
             return services;
         }

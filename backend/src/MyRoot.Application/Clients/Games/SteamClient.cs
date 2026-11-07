@@ -23,7 +23,7 @@ namespace MyRoot.Application.Clients.Games
             _configuration = configuration;
         }
 
-        public async Task<SteamPlayerSummary?> GetPlayerAsync(string steamId)
+        public async Task<SteamGetPlayerResponse?> GetPlayerAsync(string steamId)
         {
             string key = _configuration.GetValueOrThrow("APIs:SteamAPI:Key");
 
@@ -36,8 +36,7 @@ namespace MyRoot.Application.Clients.Games
                 if (!response.IsSuccessStatusCode)
                     return null;
 
-                SteamGetPlayerResponse body = await response.Content.ReadFromJsonAsync<SteamGetPlayerResponse>();
-                return body.ToSteamPlayerSummary();
+                return await response.Content.ReadFromJsonAsync<SteamGetPlayerResponse>();
             }
             catch (Exception)
             {
@@ -45,7 +44,7 @@ namespace MyRoot.Application.Clients.Games
             }
         }
 
-        public async Task<List<SteamGameSummary>> GetPlayerGamesAsync(string steamId)
+        public async Task<SteamGetPlayerGamesResponse?> GetPlayerGamesAsync(string steamId)
         {
             string key = _configuration.GetValueOrThrow("APIs:SteamAPI:Key");
 
@@ -59,14 +58,13 @@ namespace MyRoot.Application.Clients.Games
                     .WithParameter("include_played_free_games", "true")
                     .ToString());
                 if (!response.IsSuccessStatusCode)
-                    return [];
+                    return null;
 
-                SteamGetPlayerGamesResponse body = await response.Content.ReadFromJsonAsync<SteamGetPlayerGamesResponse>();
-                return body.ToSteamGameSummaries();
+                return await response.Content.ReadFromJsonAsync<SteamGetPlayerGamesResponse>();
             }
             catch (Exception)
             {
-                return [];
+                return null;
             }
         }
     }

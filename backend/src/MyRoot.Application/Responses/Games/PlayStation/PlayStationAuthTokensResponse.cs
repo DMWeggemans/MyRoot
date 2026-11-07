@@ -2,7 +2,7 @@
 
 namespace MyRoot.Application.Responses.Games.PlayStation
 {
-    public record struct PlayStationGetTokensByCodeResponse(
+    public record struct PlayStationAuthTokensResponse(
         [property: JsonPropertyName("access_token")] string AccessToken,
         [property: JsonPropertyName("token_type")] string TokenType,
         [property: JsonPropertyName("expires_in")] long AccessTokenExpiresIn,
