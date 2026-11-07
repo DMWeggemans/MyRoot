@@ -1,6 +1,8 @@
-﻿namespace MyRoot.Domain.Entities
+﻿using MyRoot.Domain.Interfaces.Entities;
+
+namespace MyRoot.Domain.Entities.User
 {
-    public class User
+    public class User : IHasGuid
     {
         public Guid Id { get; set; }
         public string UserName { get; set; } = string.Empty;
@@ -16,5 +18,6 @@
 
         // Navigation Properties
         public List<RefreshToken> RefreshTokens { get; set; } = [];
+        //public List<Account> Accounts { get; set; } = [];
     }
 }

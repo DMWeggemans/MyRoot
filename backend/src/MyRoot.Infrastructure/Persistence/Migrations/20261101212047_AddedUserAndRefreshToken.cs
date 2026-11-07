@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MyRoot.Infrastructure.Migrations
+namespace MyRoot.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class AddedUserAndRefreshToken : Migration

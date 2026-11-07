@@ -13,14 +13,20 @@ namespace MyRoot.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            ApplicationConfiguration.Urls.Application = builder.Configuration.GetValueOrThrow("Urls:Application");
-            ApplicationConfiguration.Urls.API = builder.Configuration.GetValueOrThrow("Urls:API");
+            ApplicationConfiguration.Urls.Application = builder.Environment.IsProduction()
+                ? builder.Configuration.GetValueOrThrow("Urls:Application")
+                : "http://localhost:4200";
+
+            ApplicationConfiguration.Urls.API = builder.Environment.IsProduction()
+                ? builder.Configuration.GetValueOrThrow("Urls:API")
+                : "http://localhost:5001";
 
             // Add services to the container.
             builder.Services.RegisterAPI(builder.Configuration, builder.Environment);
             builder.Services.RegisterApplication();
             builder.Services.RegisterInfrastructure(builder.Configuration.GetConnectionStringOrThrow("DefaultConnection"));
 
+            builder.Services.AddHttpClient();
             builder.Services.AddControllers();
 
             var app = builder.Build();

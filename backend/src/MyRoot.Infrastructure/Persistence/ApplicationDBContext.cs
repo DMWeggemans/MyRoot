@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyRoot.Domain.Entities.Game;
+using MyRoot.Domain.Entities.User;
 using MyRoot.Domain.Interfaces;
-using MyRoot.Domain.Entities;
 
 namespace MyRoot.Infrastructure.Persistence
 {
@@ -8,6 +9,9 @@ namespace MyRoot.Infrastructure.Persistence
     {
         public DbSet<User> Users => Set<User>();
         public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+        //public DbSet<Account> Accounts => Set<Account>();
+
+        //public DbSet<GameProvider> GameProviders => Set<GameProvider>();
 
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options)
             : base(options) { }

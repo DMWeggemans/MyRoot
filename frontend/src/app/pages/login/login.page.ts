@@ -21,7 +21,7 @@ export class LoginPage {
     public readonly request = signalForm<LoginUserRequest>({
         user: "",
         password: ""
-    }, { submission: { action: async (fieldtree) => this.login(fieldtree) } });
+    }, { submission: { action: async (fieldtree) => this.login(fieldtree), ignoreValidators: 'all' } });
 
     async login(fieldtree: FieldTree<LoginUserRequest>) {
         const result = await this.authService.login(this.request.value());

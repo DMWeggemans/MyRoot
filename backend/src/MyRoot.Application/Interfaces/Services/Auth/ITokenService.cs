@@ -1,5 +1,5 @@
 ﻿using MyRoot.Application.DTOs.Auth;
-using MyRoot.Domain.Entities;
+using MyRoot.Domain.Entities.User;
 
 namespace MyRoot.Application.Interfaces.Services.Auth
 {

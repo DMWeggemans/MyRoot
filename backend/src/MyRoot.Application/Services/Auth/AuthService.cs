@@ -4,9 +4,9 @@ using MyRoot.Domain.Interfaces.Services;
 using MyRoot.Application.Requests.Auth;
 using Microsoft.EntityFrameworkCore;
 using MyRoot.Application.DTOs.Auth;
+using MyRoot.Domain.Entities.User;
 using MyRoot.Domain.Interfaces;
 using MyRoot.Application.DTOs;
-using MyRoot.Domain.Entities;
 
 namespace MyRoot.Application.Services.Auth
 {

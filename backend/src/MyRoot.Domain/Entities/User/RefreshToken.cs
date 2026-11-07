@@ -1,6 +1,8 @@
-﻿namespace MyRoot.Domain.Entities
+﻿using MyRoot.Domain.Interfaces.Entities;
+
+namespace MyRoot.Domain.Entities.User
 {
-    public class RefreshToken
+    public class RefreshToken : IHasGuid
     {
         public Guid Id { get; set; }
         public string TokenHash { get; set; } = string.Empty;

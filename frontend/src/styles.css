@@ -4,6 +4,10 @@
     margin: 0;
 }
 
+html:has(.modal-container.visible) {
+    overflow: hidden;
+}
+
 a.disabled {
     pointer-events: none;
     cursor: default;

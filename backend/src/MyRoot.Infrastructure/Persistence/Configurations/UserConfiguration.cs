@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using MyRoot.Domain.Entities;
+using MyRoot.Domain.Entities.User;
 
 namespace MyRoot.Infrastructure.Persistence.Configurations
 {

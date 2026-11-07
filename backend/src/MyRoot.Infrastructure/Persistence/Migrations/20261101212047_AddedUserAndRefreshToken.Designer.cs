@@ -9,10 +9,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace MyRoot.Infrastructure.Migrations
+namespace MyRoot.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20261025121557_AddedUserAndRefreshToken")]
+    [Migration("20261101212047_AddedUserAndRefreshToken")]
     partial class AddedUserAndRefreshToken
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace MyRoot.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("MyRoot.Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("MyRoot.Domain.Entities.User.RefreshToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace MyRoot.Infrastructure.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("MyRoot.Domain.Entities.User", b =>
+            modelBuilder.Entity("MyRoot.Domain.Entities.User.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,9 +95,9 @@ namespace MyRoot.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MyRoot.Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("MyRoot.Domain.Entities.User.RefreshToken", b =>
                 {
-                    b.HasOne("MyRoot.Domain.Entities.User", "User")
+                    b.HasOne("MyRoot.Domain.Entities.User.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -106,7 +106,7 @@ namespace MyRoot.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyRoot.Domain.Entities.User", b =>
+            modelBuilder.Entity("MyRoot.Domain.Entities.User.User", b =>
                 {
                     b.Navigation("RefreshTokens");
                 });

@@ -1,3 +1,5 @@
 <p>{{ user()?.id }}</p>
 <p>{{ user()?.expiresOn }}</p>
 <button type="submit" (click)="logout()">Logout</button>
+<button type="button" (click)="steamService.popup()">Link Steam</button>
+<!-- <link-steam [(request)]="linkSteam" /> -->

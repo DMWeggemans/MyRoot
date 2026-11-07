@@ -1,0 +1,14 @@
+.modal-container {
+    background-color: rgba(0, 0, 0, 0.2);
+    place-items: center;
+    min-height: 100vh;
+    position: fixed;
+    display: grid;
+    width: 100%;
+    left: 0;
+    top: 0;
+
+    &:not(.visible) {
+        display: none;
+    }
+}

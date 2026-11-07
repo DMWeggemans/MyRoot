@@ -62,15 +62,15 @@ namespace MyRoot.API
 
             builder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
-                byte[] secret = Encoding.UTF8.GetBytes(configuration.GetValueOrThrow("JWT:Secret"));
+                byte[] secret = Encoding.UTF8.GetBytes(configuration.GetValueOrThrow("Authentication:JWT:Secret"));
 
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = configuration.GetValueOrThrow("JWT:Issuer"),
+                    ValidIssuer = configuration.GetValueOrThrow("Authentication:JWT:Issuer"),
 
                     ValidateAudience = true,
-                    ValidAudience = configuration.GetValueOrThrow("JWT:Audience"),
+                    ValidAudience = configuration.GetValueOrThrow("Authentication:JWT:Audience"),
 
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(secret),

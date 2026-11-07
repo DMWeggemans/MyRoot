@@ -5,7 +5,13 @@ namespace MyRoot.Application.Extensions
     public static class ConfigurationExtensions
     {
         public static string GetValueOrThrow(this IConfiguration configuration, string key)
-            => configuration[key] ?? configuration.Throw(key);
+        {
+            string? value = configuration[key];
+            if (string.IsNullOrWhiteSpace(value))
+                return configuration.Throw(key);
+
+            return value;
+        }
 
         public static string GetConnectionStringOrThrow(this IConfiguration configuration, string key)
         {
