@@ -1,5 +1,6 @@
 import { SteamClient } from '../../shared/clients/games/steam.client';
-import { LinkSteamRequest } from '../../features/games/steam.types';
+import { LinkSteamResponse } from '../../features/games/steam.types';
+import { DateHelper } from '../../shared/helpers/date.helpers';
 import { Component, inject, model } from '@angular/core';
 
 @Component({
@@ -11,13 +12,14 @@ import { Component, inject, model } from '@angular/core';
 })
 export class LinkSteamComponent {
     private readonly steamClient = inject(SteamClient);
+    public readonly DateHelper = DateHelper;
 
-    public request = model.required<LinkSteamRequest | null>();
+    public response = model.required<LinkSteamResponse | null>();
 
     public async link(answer: boolean) {
-        const request = this.request();
+        const request = this.response();
         if (!answer || request === null) {
-            this.request.set(null);
+            this.response.set(null);
             return;
         }
 
@@ -25,6 +27,6 @@ export class LinkSteamComponent {
         if (!result.succeeded)
             return;
 
-        this.request.set(null);
+        this.response.set(null);
     }
 }

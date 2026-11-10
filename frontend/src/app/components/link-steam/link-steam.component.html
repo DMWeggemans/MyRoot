@@ -1,6 +1,35 @@
-<div class="modal-container" [class.visible]="request() !== null">
+<div class="modal-container" [class.visible]="response() !== null">
     <div class="modal-form">
-        <button type="button" (click)="link(true)">Confirm</button>
-        <button type="button" (click)="link(false)">Cancel</button>
+        <a class="steam-profile" [href]="response()?.profileUrl" target="_blank">
+            <div class="steam-profile-left">
+                <img [src]="response()?.avatar" [alt]="response()?.userName">
+            </div>
+            <div class="steam-profile-right">
+                <div class="steam-profile-identity">
+                    <p class="username">{{ response()?.userName }}</p>
+                    @if (response()?.lastLogOff !== undefined && response()?.lastLogOff!.getTime() > 0) {
+                        <p class="last-online" [title]="DateHelper.formatSimple(response()?.lastLogOff)">Last online {{ DateHelper.formatDateAgo(response()?.lastLogOff) }}</p>
+                    }
+                </div>
+                <div class="steam-profile-statistics">
+                    @if (response()?.totalGames !== undefined && response()?.totalGames! > 0) {
+                        <div class="total-games">
+                            <span>{{ response()?.totalGames }}</span>
+                            <span>{{ response()?.totalGames === 1 ? "Game" : "Games" }}</span>
+                        </div>
+                    }
+                    @if (response()?.timeCreated !== undefined && response()?.timeCreated!.getTime() > 0) {
+                        <div class="created-on" [title]="DateHelper.formatSimple(response()?.timeCreated)">
+                            <span>{{ DateHelper.format(response()?.timeCreated, { month: 'short', day: 'numeric' }) }}</span>
+                            <span>Joined {{ response()?.timeCreated.getFullYear() }}</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </a>
+        <div class="modal-buttons">
+            <button class="confirm-button confirm" type="button" (click)="link(true)">Confirm</button>
+            <button class="confirm-button" type="button" (click)="link(false)">Cancel</button>
+        </div>
     </div>
 </div>

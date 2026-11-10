@@ -1,0 +1,5 @@
+<script defer>
+    const value = {{ Value }};
+    window.opener.postMessage(value, '{{ ApplicationUrl }}')
+    window.close();
+</script>

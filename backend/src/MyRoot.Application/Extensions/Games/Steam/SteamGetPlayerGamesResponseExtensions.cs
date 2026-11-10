@@ -14,12 +14,9 @@ namespace MyRoot.Application.Extensions.Games.Steam
                 LastPlayed = DateTimeOffset.FromUnixTimeSeconds(response.RTimeLastPlayed)
             };
 
-        public static List<SteamGameSummary> ToSteamGameSummaries(this SteamGetPlayerGamesResponse? response)
+        public static List<SteamGameSummary> ToSteamGameSummaries(this SteamGetPlayerGamesResponse response)
         {
-            if (response is null)
-                return [];
-
-            return [..(response.Value.Response.Games ?? []).Select(x => x.ToSteamGameSummary())];
+            return [..(response.Response.Games ?? []).Select(x => x.ToSteamGameSummary())];
         }
     }
 }

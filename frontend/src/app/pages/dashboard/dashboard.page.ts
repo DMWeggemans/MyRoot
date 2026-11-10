@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { LinkSteamComponent } from '../../components/link-steam/link-steam.component';
-import { LinkSteamRequest } from '../../features/games/steam.types';
+import { LinkSteamResponse } from '../../features/games/steam.types';
 import { SteamService } from '../../features/games/steam.service';
 import { AuthService } from '../../features/auth/auth.service';
 import { Router } from '@angular/router';
@@ -18,15 +18,16 @@ export class DashboardPage implements OnInit, OnDestroy {
     private readonly authService = inject(AuthService);
     private readonly router = inject(Router);
 
+    public Array = Array;
+
     public user = computed(() => this.authService.values());
-    public linkSteam = signal<LinkSteamRequest | null>(null);
+    public linkSteam = signal<LinkSteamResponse | null>(null);
 
     private subscription!: Subscription;
 
     ngOnInit() {
         this.subscription = this.steamService.popup$.subscribe({
             next: async (result) => {
-                console.log(result);
                 this.linkSteam.set(result.value);
             }
         });

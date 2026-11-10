@@ -20,4 +20,14 @@
     <ProjectReference Include="..\MyRoot.Infrastructure\MyRoot.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="HTML\Steam\GetSteamIdAsync\Authentication.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+	<PropertyGroup>
+		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+	</PropertyGroup>
+
 </Project>

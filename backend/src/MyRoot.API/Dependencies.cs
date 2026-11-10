@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using MyRoot.Application.DTOs;
 using Microsoft.OpenApi;
 using System.Text;
+using MyRoot.Application.Interfaces;
+using MyRoot.Application.HTML;
 
 namespace MyRoot.API
 {
@@ -22,6 +24,8 @@ namespace MyRoot.API
             services.RegisterAuthentication(configuration);
             services.RegisterAuthorization();
             services.RegisterCors(environment);
+
+            services.AddScoped<IHtmlTemplate, HtmlTemplate>();
 
             return services;
         }

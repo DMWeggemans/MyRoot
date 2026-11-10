@@ -1,10 +1,10 @@
-﻿using MyRoot.Application.Interfaces.Services.Games;
-using MyRoot.Application.Interfaces.Services.Auth;
-using Microsoft.Extensions.DependencyInjection;
-using MyRoot.Application.Services.Games;
-using MyRoot.Application.Services.Auth;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MyRoot.Application.Clients.Games;
 using MyRoot.Application.Interfaces.Clients.Games;
+using MyRoot.Application.Interfaces.Services.Auth;
+using MyRoot.Application.Interfaces.Services.Games;
+using MyRoot.Application.Services.Auth;
+using MyRoot.Application.Services.Games;
 
 namespace MyRoot.Application
 {
@@ -24,6 +24,8 @@ namespace MyRoot.Application
             services.AddScoped<IAuthService, AuthService>();
 
             services.AddScoped<ISteamService, SteamService>();
+            services.AddScoped<IPlayStationService, PlayStationService>();
+            services.AddScoped<IXboxService, XboxService>();
 
             return services;
         }

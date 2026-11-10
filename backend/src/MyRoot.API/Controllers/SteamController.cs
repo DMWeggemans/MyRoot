@@ -20,17 +20,17 @@ namespace MyRoot.API.Controllers
             return Content(result.Value!, "text/html");
         }
 
-        [HttpPost("Link")]
-        public async Task<IActionResult> Link(LinkSteamRequest request)
-        {
-            if (!Guid.TryParse(Request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId))
-                return Challenge(JwtBearerDefaults.AuthenticationScheme);
+        //[HttpPost("Link")]
+        //public async Task<IActionResult> Link(LinkSteamRequest request)
+        //{
+        //    if (!Guid.TryParse(Request.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier), out Guid userId))
+        //        return Challenge(JwtBearerDefaults.AuthenticationScheme);
 
-            Result result = await _steamService.LinkSteamAsync(request, userId);
-            if (!result.Succeeded)
-                return BadRequest(result);
+        //    Result result = await _steamService.LinkSteamAsync(request, userId);
+        //    if (!result.Succeeded)
+        //        return BadRequest(result);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
     }
 }

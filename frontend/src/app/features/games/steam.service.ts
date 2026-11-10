@@ -2,13 +2,13 @@ import { SteamClient } from "../../shared/clients/games/steam.client";
 import { environment } from "../../../environments/environment";
 import { Result } from "../../shared/clients/base.types";
 import { inject, Injectable } from "@angular/core";
-import { LinkSteamRequest } from "./steam.types";
+import { LinkSteamResponse } from "./steam.types";
 import { Subject } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class SteamService {
     private readonly steamClient = inject(SteamClient);
-    public popup$ = new Subject<Result<LinkSteamRequest>>();
+    public popup$ = new Subject<Result<LinkSteamResponse>>();
 
     public async popup() {
         const width = 600;
@@ -49,12 +49,13 @@ export class SteamService {
         if (event.origin != environment.api.url || !event.data)
             return;
 
-        const result = event.data as Result<LinkSteamRequest>;
-        if (result.value === null)
-            return;
+        console.log(event.data);
+        const result = event.data as Result<LinkSteamResponse>;
+        if (result.value !== null) {
+            result.value.lastLogOff = new Date(result.value.lastLogOff);
+            result.value.timeCreated = new Date(result.value.timeCreated);
+        }
 
-        result.value.lastLogOff = new Date(result.value.lastLogOff);
-        result.value.timeCreated = new Date(result.value.timeCreated);
         this.popup$.next(result);
     }
 }
