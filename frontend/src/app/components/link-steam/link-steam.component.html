@@ -17,18 +17,34 @@
                             <span>{{ response()?.totalGames }}</span>
                             <span>{{ response()?.totalGames === 1 ? "Game" : "Games" }}</span>
                         </div>
+                        @if (response()?.timeCreated !== undefined && response()?.timeCreated!.getTime() > 0) {
+                            <div class="created-on" [title]="DateHelper.formatSimple(response()?.timeCreated)">
+                                <span>{{ DateHelper.format(response()?.timeCreated, { month: 'short', day: 'numeric' }) }}</span>
+                                <span>Joined {{ response()?.timeCreated.getFullYear() }}</span>
+                            </div>
+                        }
                     }
-                    @if (response()?.timeCreated !== undefined && response()?.timeCreated!.getTime() > 0) {
-                        <div class="created-on" [title]="DateHelper.formatSimple(response()?.timeCreated)">
-                            <span>{{ DateHelper.format(response()?.timeCreated, { month: 'short', day: 'numeric' }) }}</span>
-                            <span>Joined {{ response()?.timeCreated.getFullYear() }}</span>
-                        </div>
+                    @else if (!response()?.isPublic) {
+                        <p class="link-steam-error">This user is set to <span class="indicator red">private</span>, please ensure your profile privacy is set to <span class="indicator green">public</span>.</p>
+                    }
+                    @else {
+                        <p class="link-steam-error">No games found. If this is incorrect, please ensure your game details privacy is set to <span class="indicator green">public</span>.</p>
                     }
                 </div>
             </div>
         </a>
         <div class="modal-buttons">
-            <button class="confirm-button confirm" type="button" (click)="link(true)">Confirm</button>
+            @if (response()?.isPublic) {
+                <button class="confirm-button confirm" type="button" (click)="link(true)">Link account</button>
+            }
+            @if (!response()?.isPublic || response()?.totalGames === undefined || response()?.totalGames! <= 0) {
+                <button class="confirm-button refresh" [class.pressed]="isRefreshing()" [disabled]="isRefreshing()" type="button" (click)="refresh()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+                    </svg>
+                </button>
+            }
             <button class="confirm-button" type="button" (click)="link(false)">Cancel</button>
         </div>
     </div>

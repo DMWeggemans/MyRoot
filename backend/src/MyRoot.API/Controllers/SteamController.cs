@@ -4,6 +4,8 @@ using MyRoot.Application.DTOs;
 using MyRoot.Application.DTOs.Auth;
 using MyRoot.Application.Interfaces.Services.Games;
 using MyRoot.Application.Requests.Games.Steam;
+using MyRoot.Application.Responses.Games.Steam;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 
 namespace MyRoot.API.Controllers
@@ -18,6 +20,18 @@ namespace MyRoot.API.Controllers
             OpenIdParameters parameters = OpenIdParameters.Build(Request.Query);
             Result<string> result = await _steamService.GetSteamIdAsync(parameters);
             return Content(result.Value!, "text/html");
+        }
+
+        [Route("Link/Response")]
+        [AcceptVerbs("QUERY")]
+        [SwaggerIgnore]
+        public async Task<IActionResult> GetLinkSteamResponse(GetLinkSteamResponseRequest request)
+        {
+            Result<LinkSteamResponse> result = await _steamService.GetLinkSteamResponseAsync(request.SteamId);
+            if (!result.Succeeded)
+                return BadRequest(result);
+
+            return Ok(result);
         }
 
         //[HttpPost("Link")]

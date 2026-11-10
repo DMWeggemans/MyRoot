@@ -31,7 +31,7 @@ namespace MyRoot.Application.Clients.Games
             {
                 HttpResponseMessage response = await _httpClient.GetAsync(URL.Create("/ISteamUser/GetPlayerSummaries/v0002")
                     .WithParameter("key", key)
-                    .WithParameter("steamids", steamId.ToString())
+                    .WithParameter("steamids", steamId)
                     .ToString());
                 if (!response.IsSuccessStatusCode)
                     return null;
