@@ -16,14 +16,14 @@ namespace MyRoot.Application.Responses.Games.Steam
         public LinkSteamResponse(string steamId, SteamPlayerSummary? player, List<SteamGameSummary> games)
         {
             SteamId = steamId;
-            IsPublic = player is null || player.Value.IsPublic;
+            IsPublic = player is null || player.IsPublic;
             UserName = player?.UserName ?? string.Empty;
             ProfileUrl = player?.ProfileUrl ?? string.Empty;
             Avatar = player?.Avatar ?? string.Empty;
             TotalGames = games.Count;
 
             DateTimeOffset lastLogOff = player?.LastLogOff ?? DateTimeOffset.MinValue;
-            DateTimeOffset lastPlayed = games.OrderByDescending(x => x.LastPlayed).FirstOrDefault().LastPlayed;
+            DateTimeOffset lastPlayed = games.OrderByDescending(x => x.LastPlayed).FirstOrDefault()?.LastPlayed ?? DateTimeOffset.MinValue;
             LastLogOff = lastLogOff > lastPlayed ? lastLogOff : lastPlayed;
 
             TimeCreated = player?.TimeCreated ?? DateTimeOffset.MinValue;

@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using MyRoot.Application.Interfaces.Services.Games;
+using MyRoot.Application.Responses.Games.Steam;
+using MyRoot.Application.Requests.Games.Steam;
+using Swashbuckle.AspNetCore.Annotations;
+using MyRoot.Application.DTOs.Auth;
 using Microsoft.AspNetCore.Mvc;
 using MyRoot.Application.DTOs;
-using MyRoot.Application.DTOs.Auth;
-using MyRoot.Application.Interfaces.Services.Games;
-using MyRoot.Application.Requests.Games.Steam;
-using MyRoot.Application.Responses.Games.Steam;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Security.Claims;
 
 namespace MyRoot.API.Controllers
 {
@@ -14,7 +12,7 @@ namespace MyRoot.API.Controllers
     [Route("[controller]")]
     public class SteamController(ISteamService _steamService) : ControllerBase
     {
-        [HttpGet("SteamId")]
+        [HttpGet("Auth/Callback")]
         public async Task<IActionResult> GetSteamId()
         {
             OpenIdParameters parameters = OpenIdParameters.Build(Request.Query);
@@ -22,7 +20,7 @@ namespace MyRoot.API.Controllers
             return Content(result.Value!, "text/html");
         }
 
-        [Route("Link/Response")]
+        [Route("Auth/Preview")]
         [AcceptVerbs("QUERY")]
         [SwaggerIgnore]
         public async Task<IActionResult> GetLinkSteamResponse(GetLinkSteamResponseRequest request)

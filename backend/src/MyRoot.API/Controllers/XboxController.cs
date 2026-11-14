@@ -1,5 +1,5 @@
-﻿using MyRoot.Application.Interfaces.Clients.Games;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using MyRoot.Domain.Interfaces.Clients.Games;
 
 namespace MyRoot.API.Controllers
 {

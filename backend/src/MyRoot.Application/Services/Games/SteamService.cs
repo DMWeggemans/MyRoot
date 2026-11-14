@@ -3,12 +3,11 @@ using MyRoot.Application.DTOs.Auth;
 using MyRoot.Application.DTOs.Games.Steam;
 using MyRoot.Application.Extensions.Games.Steam;
 using MyRoot.Application.Interfaces;
-using MyRoot.Application.Interfaces.Clients.Games;
 using MyRoot.Application.Interfaces.Services.Games;
 using MyRoot.Application.Responses.Games.Steam;
 using MyRoot.Domain.Configurations;
-using MyRoot.Domain.Entities.Game;
-using System.Numerics;
+using MyRoot.Domain.Interfaces.Clients.Games;
+using MyRoot.Domain.Responses.Games.Steam;
 using System.Text.Json;
 
 namespace MyRoot.Application.Services.Games
@@ -33,7 +32,7 @@ namespace MyRoot.Application.Services.Games
                     }));
 
                 parameters.Mode = "check_authentication";
-                using var content = parameters.ToFormUrlEncodedContent();
+                using FormUrlEncodedContent content = parameters.ToFormUrlEncodedContent();
                 HttpResponseMessage response = await _httpClient.PostAsync("https://steamcommunity.com/openid/login", content);
 
                 string? body = await response.Content.ReadAsStringAsync();
@@ -70,16 +69,16 @@ namespace MyRoot.Application.Services.Games
 
         public async Task<Result<LinkSteamResponse>> GetLinkSteamResponseAsync(string steamId)
         {
-            SteamGetPlayerResponse? playerResponse = await _steamClient.GetPlayerAsync(steamId);
+            Steam.GetPlayerResponse? playerResponse = await _steamClient.GetPlayerAsync(steamId);
             if (playerResponse is null)
                 return Result<LinkSteamResponse>.Failed("PLAYER_FAILED");
 
-            SteamPlayerSummary player = playerResponse.Value.ToSteamPlayerSummary();
-            SteamGetPlayerGamesResponse? gamesResponse = await _steamClient.GetPlayerGamesAsync(steamId);
+            SteamPlayerSummary player = playerResponse.ToSteamPlayerSummary();
+            Steam.GetPlayerGamesResponse? gamesResponse = await _steamClient.GetPlayerGamesAsync(steamId);
             if (gamesResponse is null)
                 return Result<LinkSteamResponse>.Failed("NO_GAMES_FOUND");
 
-            List<SteamGameSummary> games = gamesResponse.Value.ToSteamGameSummaries();
+            List<SteamGameSummary> games = gamesResponse.ToSteamGameSummaries();
             return Result<LinkSteamResponse>.Success(new LinkSteamResponse(steamId, player, games));
         }
     }

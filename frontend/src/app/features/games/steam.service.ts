@@ -16,7 +16,7 @@ export class SteamService {
         const left = (window.screen.width / 2) - (width / 2);
         const top = (window.screen.height / 2) - (height / 2);
 
-        const trustedUrl = `${environment.api.url}/steam/steamid`
+        const trustedUrl = `${environment.api.url}/steam/auth/callback`
         const parameters = [
             "openid.ns=http://specs.openid.net/auth/2.0",
             "openid.mode=checkid_setup",

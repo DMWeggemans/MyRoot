@@ -39,7 +39,7 @@ export class LinkSteamComponent {
             return;
         }
 
-        const result = await this.steamClient.getLinkSteamResponse({
+        const result = await this.steamClient.getLinkPreview({
             steamId: response.steamId
         });
 

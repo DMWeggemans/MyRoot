@@ -1,6 +1,6 @@
 ﻿using MyRoot.Application.Interfaces;
 
-namespace MyRoot.Application.HTML
+namespace MyRoot.API.HTML
 {
     public class HtmlTemplate(IWebHostEnvironment _environment) : IHtmlTemplate
     {

@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.IdentityModel.Tokens;
-using MyRoot.Application.Extensions;
+using MyRoot.Application.Interfaces;
 using MyRoot.Domain.Configurations;
+using MyRoot.Domain.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using MyRoot.Application.DTOs;
 using Microsoft.OpenApi;
+using MyRoot.API.HTML;
 using System.Text;
-using MyRoot.Application.Interfaces;
-using MyRoot.Application.HTML;
 
 namespace MyRoot.API
 {

@@ -1,13 +1,14 @@
 ﻿namespace MyRoot.Application.DTOs.Games.PlayStation
 {
-    public record struct PlayStationProfile(
-        string OnlineId,
-        string DisplayName,
-        string? FirstName,
-        string? LastName,
-        string? AboutMe,
-        string PublicAvatar,
-        string? PrivateAvatar,
-        bool HasPSPlus
-    ) { }
+    public class PlayStationProfile
+    {
+        public string OnlineId { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? AboutMe { get; set; }
+        public string PublicAvatar { get; set; } = string.Empty;
+        public string? PrivateAvatar { get; set; }
+        public bool HasPSPlus { get; set; }
+    }
 }

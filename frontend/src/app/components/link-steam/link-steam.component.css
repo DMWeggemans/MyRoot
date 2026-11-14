@@ -78,6 +78,7 @@
 .steam-profile {
     text-decoration: none;
     display: flex;
+    gap: 20px;
 }
 
 img {
@@ -92,7 +93,7 @@ img {
     justify-content: space-between;
     flex-direction: column;
     color: #DCDEDF;
-    padding: 20px;
+    padding: 20px 0;
     display: flex;
     width: 300px;
 }

@@ -3,11 +3,11 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
-using MyRoot.Application.Extensions;
 using MyRoot.Application.DTOs.Auth;
 using System.Security.Cryptography;
 using MyRoot.Domain.Entities.User;
 using MyRoot.Domain.Interfaces;
+using MyRoot.Domain.Extensions;
 using System.Security.Claims;
 using System.Text;
 

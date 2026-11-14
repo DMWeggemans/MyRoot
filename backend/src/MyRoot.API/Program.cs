@@ -1,10 +1,10 @@
 using MyRoot.Infrastructure.Persistence;
-using MyRoot.Application.Extensions;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using Microsoft.EntityFrameworkCore;
 using MyRoot.Domain.Configurations;
+using MyRoot.Domain.Extensions;
 using MyRoot.Infrastructure;
 using MyRoot.Application;
-using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace MyRoot.API
 {
@@ -54,11 +54,8 @@ namespace MyRoot.API
                     options.RoutePrefix = "api";
                 });
 
-                app.MapGet("/", context =>
-                {
-                    context.Response.Redirect("/api");
-                    return Task.CompletedTask;
-                });
+                app.MapGet("/", async (context)
+                    => context.Response.Redirect("/api"));
             }
             else
             {
