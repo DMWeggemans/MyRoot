@@ -1,40 +1,45 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MyRoot.Domain.Interfaces.Clients.Games;
+﻿using MyRoot.Application.Responses.Games.PlayStation;
+using MyRoot.Application.Interfaces.Services.Games;
+using Microsoft.AspNetCore.Mvc;
+using MyRoot.Application.DTOs;
 
 namespace MyRoot.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PlayStationController(IPlayStationClient _playStationClient) : ControllerBase
+    public class PlayStationController(IPlayStationService _playStationService) : ControllerBase
     {
-        [HttpGet("Code/{npsso}")]
-        public async Task<IActionResult> GetCodeByNpsso(string npsso)
+        [HttpGet("User/OnlineId")]
+        public async Task<IActionResult> LinkUserByOnlineId([FromQuery] string onlineId)
         {
-            return Ok(await _playStationClient.GetCodeByNpssoAsync(npsso));
+            if (onlineId == "me")
+                return StatusCode(403, Result.Failed("INVALID_ID"));
+
+            Result<LinkPlayStationResponse> result = await _playStationService.GetProfileByOnlineIdAsync(onlineId);
+            if (!result.Succeeded)
+            {
+                if (new List<string?>() { "USER_NOT_FOUND" }.Contains(result.Message))
+                    return NotFound(result);
+
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
-        [HttpGet("Token/{code}")]
-        public async Task<IActionResult> GetTokensByCode(string code)
+        [HttpGet("User/NPSSO")]
+        public async Task<IActionResult> LinkUserByNPSSO([FromQuery] string npsso)
         {
-            return Ok(await _playStationClient.GetTokensByCodeAsync(code));
-        }
+            Result<LinkPlayStationResponse> result = await _playStationService.GetProfileByNpssoAsync(npsso);
+            if (!result.Succeeded)
+            {
+                if (new List<string?>() { "USER_NOT_FOUND" }.Contains(result.Message))
+                    return NotFound(result);
 
-        [HttpGet("Refresh/{refreshToken}")]
-        public async Task<IActionResult> RefreshTokens(string refreshToken)
-        {
-            return Ok(await _playStationClient.RefreshTokensAsync(refreshToken));
-        }
+                return BadRequest(result);
+            }
 
-        [HttpGet("User/Id/{userName}")]
-        public async Task<IActionResult> GetAccountIdByUserName(string userName, string accessToken)
-        {
-            return Ok(await _playStationClient.GetAccountIdByUserNameAsync(accessToken, userName));
-        }
-
-        [HttpGet("User/{accountId}")]
-        public async Task<IActionResult> GetProfileByAccountId(string accountId, string accessToken)
-        {
-            return Ok(await _playStationClient.GetProfileByAccountIdAsync(accessToken, accountId));
+            return Ok(result);
         }
     }
 }

@@ -10,6 +10,7 @@
     top: 0;
 
     &:not(.visible) {
+        user-select: initial;
         display: none;
     }
 }

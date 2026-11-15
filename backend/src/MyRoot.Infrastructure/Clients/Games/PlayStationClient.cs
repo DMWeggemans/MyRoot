@@ -129,5 +129,29 @@ namespace MyRoot.Infrastructure.Clients.Games
                 return null;
             }
         }
+
+        public async Task<PlayStation.GetTrophyTitlesByAccountIdResponse?> GetTrophyTitlesByAccountIdAsync(string accessToken, string accountId, int limit = 100, int offset = 0)
+        {
+            UrlEncoder encoder = UrlEncoder.Create();
+
+            try
+            {
+                using HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, URL.Create($"https://m.np.playstation.com/api/trophy/v1/users/{encoder.Encode(accountId)}/trophyTitles")
+                    .WithParameter("limit", limit.ToString())
+                    .WithParameter("offset", offset.ToString())
+                    .ToString());
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                using HttpResponseMessage response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<PlayStation.GetTrophyTitlesByAccountIdResponse>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

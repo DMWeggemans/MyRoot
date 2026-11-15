@@ -9,5 +9,6 @@ namespace MyRoot.Domain.Interfaces.Clients.Games
         Task<PlayStation.AuthTokensResponse?> RefreshTokensAsync(string refreshToken);
         Task<PlayStation.GetAccountIdByUserNameResponse?> GetAccountIdByUserNameAsync(string accessToken, string userName);
         Task<PlayStation.GetProfileByAccountIdResponse?> GetProfileByAccountIdAsync(string accessToken, string accountId);
+        Task<PlayStation.GetTrophyTitlesByAccountIdResponse?> GetTrophyTitlesByAccountIdAsync(string accessToken, string accountId, int limit = 100, int offset = 0);
     }
 }

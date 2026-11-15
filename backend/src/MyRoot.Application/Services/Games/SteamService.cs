@@ -90,15 +90,16 @@ namespace MyRoot.Application.Services.Games
             if (preview is null || preview.SteamId != request.SteamId)
                 return Result.Failed("NOT_FOUND");
 
-            Result<LinkSteamResponse> response = await GetLinkSteamResponseAsync(Guid.Empty, preview.SteamId);
-            if (!response.Succeeded || response.Value is null)
-                return response;
+            Steam.GetPlayerResponse? playerResponse = await _steamClient.GetPlayerAsync(preview.SteamId);
+            if (playerResponse is null)
+                return Result<LinkSteamResponse>.Failed("PLAYER_NOT_FOUND");
 
+            SteamPlayerSummary player = playerResponse.ToSteamPlayerSummary();
             return Result.Success(new 
             {
                 Provider = "Steam",
-                UserId = response.Value.SteamId,
-                UserName = response.Value.UserName,
+                UserId = player.SteamId,
+                UserName = player.UserName,
                 AccessToken = string.Empty,
                 RefreshToken = string.Empty
             });

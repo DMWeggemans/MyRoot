@@ -1,3 +1,4 @@
+import { LinkPlayStationComponent } from '../../components/link-playstation/link-playstation.component';
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { LinkSteamComponent } from '../../components/link-steam/link-steam.component';
 import { LinkSteamResponse } from '../../features/games/steam.types';
@@ -9,7 +10,7 @@ import { Subscription } from 'rxjs';
 @Component({
     selector: 'dashboard-page',
     standalone: true,
-    imports: [LinkSteamComponent],
+    imports: [LinkSteamComponent, LinkPlayStationComponent],
     templateUrl: './dashboard.page.html',
     styleUrl: './dashboard.page.css',
 })
@@ -22,6 +23,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
     public user = computed(() => this.authService.values());
     public linkSteam = signal<LinkSteamResponse | null>(null);
+    public linkPlayStation = signal<boolean>(false);
 
     private subscription!: Subscription;
 

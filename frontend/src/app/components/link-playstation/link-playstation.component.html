@@ -1,0 +1,30 @@
+<div class="modal-container" [class.visible]="isOpen()" (mousedown)="close()">
+    <form class="modal-form" [formRoot]="form.field" (mousedown)="$event.stopPropagation()">
+        <div class="link-style">
+            <button type="button" class="link-style-button" [class.selected]="!isLinkMethodSecure()" (click)="switch(false)">Online ID</button>
+            <button type="button" class="link-style-button" [class.selected]="isLinkMethodSecure()" (click)="switch(true)">NPSSO</button>
+        </div>
+        @if (!isLinkMethodSecure()) {
+            <div class="login login-online-id">
+                <section class="field">
+                    <label for="online-id">Online ID</label>
+                    <input type="text" class="input" id="online-id" placeholder="Online ID" [formField]="form.field.onlineId">
+                    <validation-message [field]="form.field.onlineId()"></validation-message>
+                </section>
+            </div>
+        }
+        @else {
+            <div class="login login-npsso">
+                <section class="field">
+                    <label for="npsso">NPSSO</label>
+                    <input type="text" class="input" id="npsso" placeholder="8f9e2b1c4d7a.. or { 'npsso': '8f9e2b1c4d7a..', .. }" (input)="setNPSSO($event)" [formField]="form.field.npsso">
+                    <validation-message [field]="form.field.npsso()"></validation-message>
+                </section>
+            </div>
+        }
+        <div class="modal-buttons">
+            <button type="submit" class="confirm-button confirm">Search</button>
+            <button type="button" class="confirm-button" (click)="close()">Cancel</button>
+        </div>
+    </form>
+</div>

@@ -49,7 +49,6 @@ export class SteamService {
         if (event.origin != environment.api.url || !event.data)
             return;
 
-        console.log(event.data);
         const result = event.data as Result<LinkSteamResponse>;
         if (result.value !== null) {
             result.value.lastLogOff = new Date(result.value.lastLogOff);

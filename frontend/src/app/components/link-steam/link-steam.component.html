@@ -1,5 +1,5 @@
-<div class="modal-container" [class.visible]="response() !== null">
-    <div class="modal-form">
+<div class="modal-container" [class.visible]="response() !== null" (mouseup)="response.set(null)">
+    <div class="modal-form" (mouseup)="$event.stopPropagation()">
         <a class="steam-profile" [href]="response()?.profileUrl" target="_blank">
             <div class="steam-profile-left">
                 <img [src]="response()?.avatar" [alt]="response()?.userName">

@@ -1,0 +1,91 @@
+.modal-container {
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    place-items: center;
+    min-height: 100vh;
+    position: fixed;
+    display: grid;
+    width: 100%;
+    left: 0;
+    top: 0;
+
+    &:not(.visible) {
+        user-select: initial;
+        display: none;
+    }
+}
+
+.modal-form {
+    background-color: white;
+    border: 1px solid black;
+    flex-direction: column;
+    border-radius: 5px;
+    position: relative;
+    padding: 20px;
+    display: flex;
+    width: 450px;
+    gap: 20px;
+}
+
+.link-style {
+    display: flex;
+    gap: 5px;
+}
+
+.link-style-button {
+    background-color: transparent;
+    border: 1px solid white;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    flex: 1;
+
+    &:hover {
+        border: 1px solid lightgrey;
+    }
+
+    &:active, &.selected {
+        border: 1px solid black;
+    }
+}
+
+.field {
+    flex-direction: column;
+    display: flex;
+    gap: 5px;
+}
+
+.input {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.confirm-button {
+    box-shadow: 0 2px 10px -2px black;
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+    padding: 12px;
+    border: none;
+    width: 100%;
+
+    &:hover {
+        background-color: lightgrey;
+        transform: scale(1.01);
+    }
+
+    &.confirm {
+        background-color: lightskyblue;
+
+        &:hover {
+            background-color: dodgerblue;
+        }
+    }
+}

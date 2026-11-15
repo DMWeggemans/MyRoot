@@ -1,5 +1,5 @@
 ﻿using Response = MyRoot.Domain.Responses.Games.PlayStation.PlayStation;
-using MyRoot.Application.DTOs.Games.PlayStation;
+using MyRoot.Application.Responses.Games.PlayStation;
 
 namespace MyRoot.Application.Extensions.Games.PlayStation
 {
@@ -7,17 +7,20 @@ namespace MyRoot.Application.Extensions.Games.PlayStation
     {
         private readonly static List<string> OrderPreferences = ["xl", "l", "m", "s"];
 
-        public static PlayStationProfile ToPlayStationProfile(this Response.GetProfileByAccountIdResponse response)
-            => new PlayStationProfile()
+        public static LinkPlayStationResponse ToPlayStationProfile(this Response.GetProfileByAccountIdResponse response, Guid key, string accountId, List<Response.GetTrophyTitlesByAccountIdResponse.Payload> games, bool hasGamesPrivate)
+            => new LinkPlayStationResponse()
             {
-                OnlineId = response.OnlineId,
+                Key = key,
+                AccountId = accountId,
                 DisplayName = response.PersonalDetail.DisplayName ?? response.OnlineId,
-                FirstName = response.PersonalDetail.FirstName,
-                LastName = response.PersonalDetail.LastName,
-                AboutMe = response.AboutMe.Length > 0 ? response.AboutMe : null,
-                PublicAvatar = response.Avatars.OrderBy(x=> OrderPreferences.IndexOf(x.Size)).FirstOrDefault()?.Url ?? string.Empty,
-                PrivateAvatar = response.PersonalDetail.ProfilePictures?.OrderBy(x => OrderPreferences.IndexOf(x.Size)).FirstOrDefault()?.Url,
-                HasPSPlus = response.IsPlus
+                IsPublic = !hasGamesPrivate && (response.Languages.Count > 0 || !string.IsNullOrWhiteSpace(response.AboutMe)),
+                FullName = !string.IsNullOrWhiteSpace(response.PersonalDetail.FirstName) && !string.IsNullOrWhiteSpace(response.PersonalDetail.LastName)
+                    ? $"{response.PersonalDetail.FirstName} {response.PersonalDetail.LastName}" : null,
+                Avatar = response.PersonalDetail.ProfilePictures?.OrderBy(x => OrderPreferences.IndexOf(x.Size)).FirstOrDefault()?.Url
+                    ?? response.Avatars.OrderBy(x=> OrderPreferences.IndexOf(x.Size)).FirstOrDefault()?.Url,
+                TotalGames = games.Count,
+                HasPSPlus = response.IsPlus,
+                LastEarned = games.OrderByDescending(x => x.LastUpdatedDateTime).FirstOrDefault()?.LastUpdatedDateTime
             };
     }
 }
