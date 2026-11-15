@@ -18,13 +18,16 @@ export class LinkSteamComponent {
     public isRefreshing = signal<boolean>(false);
 
     public async link(answer: boolean) {
-        const request = this.response();
-        if (!answer || request === null) {
+        const response = this.response();
+        if (!answer || response === null) {
             this.response.set(null);
             return;
         }
 
-        const result = await this.steamClient.link(request);
+        const result = await this.steamClient.link({
+            steamId: response.steamId,
+            key: response.key
+        });
         if (!result.succeeded)
             return;
 
@@ -40,7 +43,8 @@ export class LinkSteamComponent {
         }
 
         const result = await this.steamClient.getLinkPreview({
-            steamId: response.steamId
+            steamId: response.steamId,
+            key: response.key
         });
 
         if (!result.succeeded && !["PRIVATE_PLAYER", "NO_GAMES_FOUND"].includes(result.message ?? "")){

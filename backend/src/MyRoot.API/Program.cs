@@ -27,6 +27,7 @@ namespace MyRoot.API
             builder.Services.RegisterApplication();
             builder.Services.RegisterInfrastructure(builder.Configuration.GetConnectionStringOrThrow("DefaultConnection"));
 
+            builder.Services.AddDistributedMemoryCache();
             builder.Services.AddHttpClient();
             builder.Services.AddControllers();
 

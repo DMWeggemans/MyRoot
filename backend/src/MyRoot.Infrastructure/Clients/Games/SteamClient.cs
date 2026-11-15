@@ -21,6 +21,22 @@ namespace MyRoot.Infrastructure.Clients.Games
             _configuration = configuration;
         }
 
+        public async Task<bool> ValidateOpenIdAsync(OpenIdParameters parameters)
+        {
+            parameters.Mode = "check_authentication";
+
+            try
+            {
+                HttpResponseMessage response = await _httpClient.PostAsync("https://steamcommunity.com/openid/login", parameters.ToFormUrlEncodedContent());
+                string? body = await response.Content.ReadAsStringAsync();
+                return body is not null && body.Contains("is_valid:true");
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<Steam.GetPlayerResponse?> GetPlayerAsync(string steamId)
         {
             string key = _configuration.GetValueOrThrow("APIs:SteamAPI:Key");

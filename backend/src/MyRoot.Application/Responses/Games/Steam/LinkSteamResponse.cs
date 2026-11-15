@@ -4,6 +4,7 @@ namespace MyRoot.Application.Responses.Games.Steam
 {
     public class LinkSteamResponse
     {
+        public Guid Key { get; set; }
         public string SteamId { get; set; } = string.Empty;
         public bool IsPublic { get; set; }
         public string UserName { get; set; } = string.Empty;
@@ -13,8 +14,11 @@ namespace MyRoot.Application.Responses.Games.Steam
         public DateTimeOffset LastLogOff  { get; set; }
         public DateTimeOffset TimeCreated { get; set; }
 
-        public LinkSteamResponse(string steamId, SteamPlayerSummary? player, List<SteamGameSummary> games)
+        public LinkSteamResponse() { }
+
+        public LinkSteamResponse(Guid key, string steamId, SteamPlayerSummary? player, List<SteamGameSummary> games)
         {
+            Key = key;
             SteamId = steamId;
             IsPublic = player is null || player.IsPublic;
             UserName = player?.UserName ?? string.Empty;

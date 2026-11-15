@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
+﻿using Microsoft.Extensions.Primitives;
 using System.Text.Json.Serialization;
 
-namespace MyRoot.Application.DTOs.Auth
+namespace MyRoot.Domain.Models
 {
     public class OpenIdParameters
     {
@@ -27,7 +26,7 @@ namespace MyRoot.Application.DTOs.Auth
         [JsonPropertyName("openid.signed")]
         public string? Signed { get; set; }
 
-        public static OpenIdParameters Build(IQueryCollection query)
+        public static OpenIdParameters Build(Dictionary<string, StringValues> query)
             => new OpenIdParameters()
             {
                 AssocHandle = query.TryGetValue("openid.assoc_handle", out StringValues assocHandle) ? assocHandle.FirstOrDefault() : null,

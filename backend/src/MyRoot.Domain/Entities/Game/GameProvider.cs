@@ -9,6 +9,8 @@ namespace MyRoot.Domain.Entities.Game
         public string Provider { get; set; } = string.Empty;
         public string UserId { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
+        public string? AccessToken { get; set; }
+        public string? RefreshToken { get; set; }
 
         public DateTimeOffset LinkedOn { get; set; }
         public DateTimeOffset? UpdatedOn { get; set; }
